@@ -1,0 +1,9 @@
+{
+    "name": "project/care_health",
+    "require": {
+        "cakephp/cakephp": "2.10.*"
+    },
+    "config": {
+        "vendor-dir": "Vendor/"
+    }
+}
