@@ -145,6 +145,8 @@
                             'type' => 'submit',
                             'class' => 'btn btn-primary'
                         )); ?>
+                        <span class="form-actions-sep" style="margin:0 12px;color:#666;">---------------</span>
+                        <?php echo $this->Html->link('BACK TO LOGIN', array('controller' => 'users', 'action' => 'login'), array('class' => 'btn back-to-login-btn', 'escape' => false, 'style' => 'background-color:#0066cc;color:#000;border:none;padding:6px 12px;text-decoration:none;')); ?>
                     </div>
 
                 <?php echo $this->Form->end(); ?>
