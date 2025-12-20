@@ -171,7 +171,7 @@
                 <?php
                      echo $this->Html->image('user2-160x160.jpg',
                      array(
-                    'class' => 'rounded-circle shadow user-avatar',
+                    'class' => 'user-image rounded-circle shadow',
                     'alt'   => 'Care Health Insurance'
                       )
                     ); 
