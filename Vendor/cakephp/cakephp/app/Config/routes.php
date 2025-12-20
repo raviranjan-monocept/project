@@ -33,5 +33,6 @@ Router::connect('/logout', array('controller' => 'users', 'action' => 'logout'))
 // Dashboard routes
 Router::connect('/dashboard', array('controller' => 'users', 'action' => 'dashboard'));
 
+
 // Default CakePHP routes
 require CAKE . 'Config' . DS . 'routes.php';
