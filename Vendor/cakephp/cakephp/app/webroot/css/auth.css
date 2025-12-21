@@ -315,6 +315,11 @@ body {
     flex: 1;
     text-align: right;
 }
+.form-right-forgot {
+    flex: 1;
+    text-align: right;
+    display:none; 
+}
 
 /* Two Column Layout for Signup */
 .form-row-2col {

@@ -112,7 +112,7 @@
                                 Remember Me
                             </label>
                         </div>
-                        <div class="form-right">
+                        <div class="form-right-forgot">
                             <a href="#" class="link-text">FORGOT YOUR PASSWORD?</a>
                         </div>
                     </div>
