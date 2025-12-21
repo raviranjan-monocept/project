@@ -19,11 +19,15 @@
                 <div class="role-selector">
                     <span class="login-as-label">Login As:</span>
                     <div class="dropdown">
-                        <button class="dropdown-toggle" id="roleDropdown" type="button">
-                            <span class="user-icon">👤</span>
-                            <span class="role-text" id="selectedRole">USER</span>
-                            <span class="dropdown-arrow">▾</span>
-                        </button>
+                            <?php
+                            $initialRole = isset($selectedRole) ? $selectedRole : 'user';
+                            $initialRoleDisplay = strtoupper(str_replace('_', ' ', $initialRole));
+                            ?>
+                            <button class="dropdown-toggle" id="roleDropdown" type="button">
+                                <span class="user-icon">👤</span>
+                                <span class="role-text" id="selectedRole"><?php echo h($initialRoleDisplay); ?></span>
+                                <span class="dropdown-arrow">▾</span>
+                            </button>
                         <div class="dropdown-menu" id="roleDropdownMenu">
                             <a href="#" class="dropdown-item" data-role="user">USER</a>
                             <a href="#" class="dropdown-item" data-role="guest">GUEST</a>
@@ -67,15 +71,12 @@
 <?php if ($this->request->params['action'] === 'login'): ?>
 <script>
 $(document).ready(function() {
-    // Get current role from hidden field if exists
-    var currentRole = 'user';
-    if ($('#userRole').length) {
-        currentRole = $('#userRole').val() || 'user';
-    }
-    
+    // Initialize header using server-provided role when available
+    var currentRole = '<?php echo h($initialRole); ?>';
+
     // Update header dropdown to match current role
     $('#selectedRole').text(currentRole.toUpperCase().replace('_', ' '));
-    
+
     // Set active class on dropdown items
     $('.dropdown-item').removeClass('active');
     $('.dropdown-item[data-role="' + currentRole + '"]').addClass('active');

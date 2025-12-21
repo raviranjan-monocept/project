@@ -13,8 +13,13 @@
 </head>
 <body>
     <div class="auth-container">
+        <?php
+        // Determine selected role early so header can initialize correctly
+        $selectedRole = isset($this->request->data['User']['role']) ?
+            $this->request->data['User']['role'] : 'user';
+        ?>
         <!-- Header -->
-        <?php echo $this->element('header'); ?>
+        <?php echo $this->element('header', array('selectedRole' => $selectedRole)); ?>
 
         <!-- Login Form Card -->
         <div class="auth-card">
@@ -38,11 +43,6 @@
                 </div>
 
                 <!-- Login Form -->
-                <?php 
-                // Get the selected role from POST data if login failed
-                $selectedRole = isset($this->request->data['User']['role']) ? 
-                    $this->request->data['User']['role'] : 'user';
-                ?>
                 
                 <?php echo $this->Form->create('User', array('url' => array('action' => 'login'), 'id' => 'loginForm')); ?>
                 
