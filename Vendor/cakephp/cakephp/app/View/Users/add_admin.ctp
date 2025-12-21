@@ -1,4 +1,8 @@
-<!-- File: View/Users/add_admin.ctp -->
+ <?php echo $this->element('navbar'); ?>
+      <!--end::Header-->
+      <!--begin::Sidebar-->
+      <?php echo $this->element('sidebar'); ?>
+      <!-- File: View/Users/add_admin.ctp -->
 <div class="content-wrapper">
     <!-- Content Header -->
     <section class="content-header">
@@ -140,7 +144,7 @@
         </div>
     </section>
 </div>
-
+ <?php $this->start('script'); ?>
 <style>
 .form-control {
     display: block;
@@ -173,3 +177,5 @@
     border-radius: .25rem;
 }
 </style>
+  <?php $this->end(); ?>
+  <?php echo $this->element('footer'); ?>

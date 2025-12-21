@@ -27,7 +27,13 @@ class AppController extends Controller {
     );
 
     public $helpers = array('Html', 'Form', 'Session');
+ public function beforeRender() {
+        parent::beforeRender();
 
+        // Always define $user for views/elements
+        $loggedIn = $this->Auth->user();   // array or null
+        $this->set('user', $loggedIn);     // can be null, but never undefined
+    }
     public function beforeFilter() {
         // Set layout for API requests
         if ($this->RequestHandler->prefers('json')) {
