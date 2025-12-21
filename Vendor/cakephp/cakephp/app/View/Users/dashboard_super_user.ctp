@@ -453,53 +453,59 @@
                                                 <td><?php echo h($admin['User']['username']); ?></td>
                                                 <td><?php echo h($admin['User']['email']); ?></td>
                                                 <td>
-                                                    <?php if ($admin['User']['role'] === 'super_user'): ?>
-                                                        <span class="badge badge-danger">Super Admin</span>
-                                                    <?php else: ?>
-                                                        <span class="badge badge-primary">Admin</span>
-                                                    <?php endif; ?>
+                                                  <?php if ($admin['User']['role'] === 'super_user'): ?>
+                                                    <span class="text-dark">Super Admin</span>
+                                                  <?php else: ?>
+                                                    <span class="text-dark">Admin</span>
+                                                  <?php endif; ?>
                                                 </td>
                                                 <td><?php echo h($admin['User']['modified']); ?></td>
                                                 <td>
-                                                    <?php if ($admin['User']['status'] == 1): ?>
-                                                        <span class="badge badge-success">Active</span>
-                                                    <?php else: ?>
-                                                        <span class="badge badge-secondary">Inactive</span>
-                                                    <?php endif; ?>
+                                                  <?php if ($admin['User']['status'] == 1): ?>
+                                                    <span class="text-success">Active</span>
+                                                  <?php else: ?>
+                                                    <span class="text-danger">Inactive</span>
+                                                  <?php endif; ?>
                                                 </td>
                                                 <td>
-                                                    <div class="btn-group">
-                                                        <?php echo $this->Html->link(
-                                                            '<i class="fas fa-eye"></i>',
-                                                            array('controller' => 'users', 'action' => 'view', $admin['User']['id']),
-                                                            array('class' => 'btn btn-info btn-sm', 'escape' => false, 'title' => 'View')
-                                                        ); ?>
-                                                        
-                                                        <?php echo $this->Html->link(
-                                                            '<i class="fas fa-edit"></i>',
-                                                            array('controller' => 'users', 'action' => 'edit', $admin['User']['id']),
-                                                            array('class' => 'btn btn-warning btn-sm', 'escape' => false, 'title' => 'Edit')
-                                                        ); ?>
-                                                        
-                                                        <?php if ($admin['User']['id'] != $this->Session->read('Auth.User.id')): ?>
-                                                            <?php echo $this->Form->postLink(
-                                                                '<i class="fas fa-trash"></i>',
-                                                                array('controller' => 'users', 'action' => 'delete', $admin['User']['id']),
-                                                                array('class' => 'btn btn-danger btn-sm', 'escape' => false, 'title' => 'Delete'),
-                                                                'Are you sure you want to delete this administrator?'
-                                                            ); ?>
-                                                            
-                                                            <?php echo $this->Form->postLink(
-                                                                $admin['User']['status'] == 1 ? '<i class="fas fa-toggle-on"></i>' : '<i class="fas fa-toggle-off"></i>',
-                                                                array('controller' => 'users', 'action' => 'toggle_status', $admin['User']['id']),
-                                                                array(
-                                                                    'class' => 'btn btn-' . ($admin['User']['status'] == 1 ? 'success' : 'secondary') . ' btn-sm',
-                                                                    'escape' => false,
-                                                                    'title' => $admin['User']['status'] == 1 ? 'Deactivate' : 'Activate'
-                                                                )
-                                                            ); ?>
-                                                        <?php endif; ?>
-                                                    </div>
+                                                  <div class="btn-group" role="group" aria-label="admin-actions">
+                                                    <?php echo $this->Html->link(
+                                                      '<i class="bi bi-eye"></i>',
+                                                      array('controller' => 'users', 'action' => 'view', $admin['User']['id']),
+                                                      array('class' => 'btn btn-outline-primary btn-sm', 'escape' => false, 'title' => 'View')
+                                                    ); ?>
+
+                                                    <?php echo $this->Html->link(
+                                                      '<i class="bi bi-pencil"></i>',
+                                                      array('controller' => 'users', 'action' => 'edit', $admin['User']['id']),
+                                                      array('class' => 'btn btn-outline-warning btn-sm', 'escape' => false, 'title' => 'Edit')
+                                                    ); ?>
+
+                                                    <?php if ($admin['User']['id'] != $this->Session->read('Auth.User.id')): ?>
+                                                      <?php echo $this->Form->postLink(
+                                                        '<i class="bi bi-trash"></i>',
+                                                        array('controller' => 'users', 'action' => 'delete', $admin['User']['id']),
+                                                        array('class' => 'btn btn-outline-danger btn-sm', 'escape' => false, 'title' => 'Delete'),
+                                                        'Are you sure you want to delete this administrator?'
+                                                      ); ?>
+                                                    <?php endif; ?>
+
+                                                    <?php if ($admin['User']['status'] == 1): ?>
+                                                      <?php echo $this->Form->postLink(
+                                                        '<i class="bi bi-toggle-on"></i>',
+                                                        array('controller' => 'users', 'action' => 'toggle_status', $admin['User']['id']),
+                                                        array('class' => 'btn btn-outline-danger btn-sm', 'escape' => false, 'title' => 'Deactivate'),
+                                                        'Are you sure you want to deactivate this administrator?'
+                                                      ); ?>
+                                                    <?php else: ?>
+                                                      <?php echo $this->Form->postLink(
+                                                        '<i class="bi bi-toggle-off"></i>',
+                                                        array('controller' => 'users', 'action' => 'toggle_status', $admin['User']['id']),
+                                                        array('class' => 'btn btn-outline-success btn-sm', 'escape' => false, 'title' => 'Activate'),
+                                                        'Are you sure you want to activate this administrator?'
+                                                      ); ?>
+                                                    <?php endif; ?>
+                                                  </div>
                                                 </td>
                                             </tr>
                                         <?php endforeach; ?>
