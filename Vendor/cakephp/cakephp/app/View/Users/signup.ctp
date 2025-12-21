@@ -56,6 +56,7 @@
                             <?php echo $this->Form->input('full_name', array(
                                 'type' => 'text',
                                 'label' => false,
+                                'placeholder' => 'Full Name',
                                 'class' => 'form-control',
                                 'div' => false,
                                 'id' => 'fullName'

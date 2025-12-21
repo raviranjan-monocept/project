@@ -7,7 +7,15 @@
     <div class="header-content">
         <!-- Logo -->
         <div class="header-logo">
-            <?php echo $this->Html->image('careLogo.png', array('alt' => 'Care Health Insurance', 'class' => 'logo-img')); ?>
+            <?php if ($this->request->params['action'] === 'signup') {
+                echo $this->Html->link(
+                    $this->Html->image('careLogo.png', array('alt' => 'Care Health Insurance', 'class' => 'logo-img')),
+                    array('action' => 'login'),
+                    array('escape' => false, 'class' => 'logo-link')
+                );
+            } else {
+                echo $this->Html->image('careLogo.png', array('alt' => 'Care Health Insurance', 'class' => 'logo-img'));
+            } ?>
         </div>
 
         <!-- Right Side: Role Dropdown & Sign Up Button -->
