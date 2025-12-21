@@ -233,10 +233,6 @@
          
                <?php echo $this->Html->image('careLogo.png', array('alt' => 'Care Health Insurance')); ?>
            
-            <!--end::Brand Image-->
-            <!--begin::Brand Text-->
-           
-            <!--end::Brand Text-->
           </a>
           <!--end::Brand Link-->
         </div>
@@ -258,431 +254,67 @@
                   <i class="nav-icon bi bi-speedometer"></i>
                   <p>
                     Dashboard
-                    <i class="nav-arrow bi bi-chevron-right"></i>
                   </p>
                 </a>
-                <ul class="nav nav-treeview">
-                  <li class="nav-item">
-                    <a href="./index.html" class="nav-link">
-                      <i class="nav-icon bi bi-circle"></i>
-                      <p>Dashboard v1</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="./index2.html" class="nav-link active">
-                      <i class="nav-icon bi bi-circle"></i>
-                      <p>Dashboard v2</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="./index3.html" class="nav-link">
-                      <i class="nav-icon bi bi-circle"></i>
-                      <p>Dashboard v3</p>
-                    </a>
-                  </li>
-                </ul>
+               
               </li>
+
+            <li class="nav-item">
+                <a href="./generate/theme.html" class="nav-link">
+                  <i class="nav-icon bi bi-palette"></i>
+                  <p>Admin Management</p>
+                </a>
+              </li>
+
+
+              
               <li class="nav-item">
                 <a href="./generate/theme.html" class="nav-link">
                   <i class="nav-icon bi bi-palette"></i>
-                  <p>Theme Generate</p>
+                  <p>Claims & Approvals</p>
                 </a>
+              </li>
+               <li class="nav-item">
+                <a href="#" class="nav-link">
+                  <i class="nav-icon bi bi-box-seam-fill"></i>
+                  <p>
+                    All Policy
+                  </p>
+                </a>
+                
               </li>
               <li class="nav-item">
                 <a href="#" class="nav-link">
                   <i class="nav-icon bi bi-box-seam-fill"></i>
                   <p>
-                    Widgets
-                    <i class="nav-arrow bi bi-chevron-right"></i>
+                    All Categories
                   </p>
                 </a>
-                <ul class="nav nav-treeview">
-                  <li class="nav-item">
-                    <a href="./widgets/small-box.html" class="nav-link">
-                      <i class="nav-icon bi bi-circle"></i>
-                      <p>Small Box</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="./widgets/info-box.html" class="nav-link">
-                      <i class="nav-icon bi bi-circle"></i>
-                      <p>info Box</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="./widgets/cards.html" class="nav-link">
-                      <i class="nav-icon bi bi-circle"></i>
-                      <p>Cards</p>
-                    </a>
-                  </li>
-                </ul>
+                
               </li>
-              <li class="nav-item">
-                <a href="#" class="nav-link">
-                  <i class="nav-icon bi bi-clipboard-fill"></i>
-                  <p>
-                    Layout Options
-                    <span class="nav-badge badge text-bg-secondary me-3">6</span>
-                    <i class="nav-arrow bi bi-chevron-right"></i>
-                  </p>
-                </a>
-                <ul class="nav nav-treeview">
-                  <li class="nav-item">
-                    <a href="./layout/unfixed-sidebar.html" class="nav-link">
-                      <i class="nav-icon bi bi-circle"></i>
-                      <p>Default Sidebar</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="./layout/fixed-sidebar.html" class="nav-link">
-                      <i class="nav-icon bi bi-circle"></i>
-                      <p>Fixed Sidebar</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="./layout/fixed-header.html" class="nav-link">
-                      <i class="nav-icon bi bi-circle"></i>
-                      <p>Fixed Header</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="./layout/fixed-footer.html" class="nav-link">
-                      <i class="nav-icon bi bi-circle"></i>
-                      <p>Fixed Footer</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="./layout/fixed-complete.html" class="nav-link">
-                      <i class="nav-icon bi bi-circle"></i>
-                      <p>Fixed Complete</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="./layout/layout-custom-area.html" class="nav-link">
-                      <i class="nav-icon bi bi-circle"></i>
-                      <p>Layout <small>+ Custom Area </small></p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="./layout/sidebar-mini.html" class="nav-link">
-                      <i class="nav-icon bi bi-circle"></i>
-                      <p>Sidebar Mini</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="./layout/collapsed-sidebar.html" class="nav-link">
-                      <i class="nav-icon bi bi-circle"></i>
-                      <p>Sidebar Mini <small>+ Collapsed</small></p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="./layout/logo-switch.html" class="nav-link">
-                      <i class="nav-icon bi bi-circle"></i>
-                      <p>Sidebar Mini <small>+ Logo Switch</small></p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="./layout/layout-rtl.html" class="nav-link">
-                      <i class="nav-icon bi bi-circle"></i>
-                      <p>Layout RTL</p>
-                    </a>
-                  </li>
-                </ul>
-              </li>
-              <li class="nav-item">
-                <a href="#" class="nav-link">
-                  <i class="nav-icon bi bi-tree-fill"></i>
-                  <p>
-                    UI Elements
-                    <i class="nav-arrow bi bi-chevron-right"></i>
-                  </p>
-                </a>
-                <ul class="nav nav-treeview">
-                  <li class="nav-item">
-                    <a href="./UI/general.html" class="nav-link">
-                      <i class="nav-icon bi bi-circle"></i>
-                      <p>General</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="./UI/icons.html" class="nav-link">
-                      <i class="nav-icon bi bi-circle"></i>
-                      <p>Icons</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="./UI/timeline.html" class="nav-link">
-                      <i class="nav-icon bi bi-circle"></i>
-                      <p>Timeline</p>
-                    </a>
-                  </li>
-                </ul>
-              </li>
-              <li class="nav-item">
-                <a href="#" class="nav-link">
-                  <i class="nav-icon bi bi-pencil-square"></i>
-                  <p>
-                    Forms
-                    <i class="nav-arrow bi bi-chevron-right"></i>
-                  </p>
-                </a>
-                <ul class="nav nav-treeview">
-                  <li class="nav-item">
-                    <a href="./forms/general.html" class="nav-link">
-                      <i class="nav-icon bi bi-circle"></i>
-                      <p>General Elements</p>
-                    </a>
-                  </li>
-                </ul>
-              </li>
-              <li class="nav-item">
-                <a href="#" class="nav-link">
-                  <i class="nav-icon bi bi-table"></i>
-                  <p>
-                    Tables
-                    <i class="nav-arrow bi bi-chevron-right"></i>
-                  </p>
-                </a>
-                <ul class="nav nav-treeview">
-                  <li class="nav-item">
-                    <a href="./tables/simple.html" class="nav-link">
-                      <i class="nav-icon bi bi-circle"></i>
-                      <p>Simple Tables</p>
-                    </a>
-                  </li>
-                </ul>
-              </li>
-              <li class="nav-header">EXAMPLES</li>
-              <li class="nav-item">
-                <a href="#" class="nav-link">
-                  <i class="nav-icon bi bi-box-arrow-in-right"></i>
-                  <p>
-                    Auth
-                    <i class="nav-arrow bi bi-chevron-right"></i>
-                  </p>
-                </a>
-                <ul class="nav nav-treeview">
-                  <li class="nav-item">
-                    <a href="#" class="nav-link">
-                      <i class="nav-icon bi bi-box-arrow-in-right"></i>
-                      <p>
-                        Version 1
-                        <i class="nav-arrow bi bi-chevron-right"></i>
-                      </p>
-                    </a>
-                    <ul class="nav nav-treeview">
-                      <li class="nav-item">
-                        <a href="./examples/login.html" class="nav-link">
-                          <i class="nav-icon bi bi-circle"></i>
-                          <p>Login</p>
-                        </a>
-                      </li>
-                      <li class="nav-item">
-                        <a href="./examples/register.html" class="nav-link">
-                          <i class="nav-icon bi bi-circle"></i>
-                          <p>Register</p>
-                        </a>
-                      </li>
-                    </ul>
-                  </li>
-                  <li class="nav-item">
-                    <a href="#" class="nav-link">
-                      <i class="nav-icon bi bi-box-arrow-in-right"></i>
-                      <p>
-                        Version 2
-                        <i class="nav-arrow bi bi-chevron-right"></i>
-                      </p>
-                    </a>
-                    <ul class="nav nav-treeview">
-                      <li class="nav-item">
-                        <a href="./examples/login-v2.html" class="nav-link">
-                          <i class="nav-icon bi bi-circle"></i>
-                          <p>Login</p>
-                        </a>
-                      </li>
-                      <li class="nav-item">
-                        <a href="./examples/register-v2.html" class="nav-link">
-                          <i class="nav-icon bi bi-circle"></i>
-                          <p>Register</p>
-                        </a>
-                      </li>
-                    </ul>
-                  </li>
-                  <li class="nav-item">
-                    <a href="./examples/lockscreen.html" class="nav-link">
-                      <i class="nav-icon bi bi-circle"></i>
-                      <p>Lockscreen</p>
-                    </a>
-                  </li>
-                </ul>
-              </li>
-              <li class="nav-header">DOCUMENTATIONS</li>
+
               <li class="nav-item">
                 <a href="./docs/introduction.html" class="nav-link">
                   <i class="nav-icon bi bi-download"></i>
-                  <p>Installation</p>
+                  <p>Payments & Billing</p>
                 </a>
               </li>
-              <li class="nav-item">
-                <a href="./docs/layout.html" class="nav-link">
-                  <i class="nav-icon bi bi-grip-horizontal"></i>
-                  <p>Layout</p>
+             <li class="nav-item">
+                <a href="./docs/introduction.html" class="nav-link">
+                  <i class="nav-icon bi bi-download"></i>
+                  <p>Reports & Analytics</p>
                 </a>
               </li>
-              <li class="nav-item">
-                <a href="./docs/color-mode.html" class="nav-link">
-                  <i class="nav-icon bi bi-star-half"></i>
-                  <p>Color Mode</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="#" class="nav-link">
-                  <i class="nav-icon bi bi-ui-checks-grid"></i>
-                  <p>
-                    Components
-                    <i class="nav-arrow bi bi-chevron-right"></i>
-                  </p>
-                </a>
-                <ul class="nav nav-treeview">
-                  <li class="nav-item">
-                    <a href="./docs/components/main-header.html" class="nav-link">
-                      <i class="nav-icon bi bi-circle"></i>
-                      <p>Main Header</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="./docs/components/main-sidebar.html" class="nav-link">
-                      <i class="nav-icon bi bi-circle"></i>
-                      <p>Main Sidebar</p>
-                    </a>
-                  </li>
-                </ul>
-              </li>
-              <li class="nav-item">
-                <a href="#" class="nav-link">
-                  <i class="nav-icon bi bi-filetype-js"></i>
-                  <p>
-                    Javascript
-                    <i class="nav-arrow bi bi-chevron-right"></i>
-                  </p>
-                </a>
-                <ul class="nav nav-treeview">
-                  <li class="nav-item">
-                    <a href="./docs/javascript/treeview.html" class="nav-link">
-                      <i class="nav-icon bi bi-circle"></i>
-                      <p>Treeview</p>
-                    </a>
-                  </li>
-                </ul>
-              </li>
-              <li class="nav-item">
-                <a href="./docs/browser-support.html" class="nav-link">
-                  <i class="nav-icon bi bi-browser-edge"></i>
-                  <p>Browser Support</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="./docs/how-to-contribute.html" class="nav-link">
-                  <i class="nav-icon bi bi-hand-thumbs-up-fill"></i>
-                  <p>How To Contribute</p>
-                </a>
-              </li>
+
               <li class="nav-item">
                 <a href="./docs/faq.html" class="nav-link">
                   <i class="nav-icon bi bi-question-circle-fill"></i>
-                  <p>FAQ</p>
+                  <p>FAQ / Help Center</p>
                 </a>
               </li>
-              <li class="nav-item">
-                <a href="./docs/license.html" class="nav-link">
-                  <i class="nav-icon bi bi-patch-check-fill"></i>
-                  <p>License</p>
-                </a>
-              </li>
-              <li class="nav-header">MULTI LEVEL EXAMPLE</li>
-              <li class="nav-item">
-                <a href="#" class="nav-link">
-                  <i class="nav-icon bi bi-circle-fill"></i>
-                  <p>Level 1</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="#" class="nav-link">
-                  <i class="nav-icon bi bi-circle-fill"></i>
-                  <p>
-                    Level 1
-                    <i class="nav-arrow bi bi-chevron-right"></i>
-                  </p>
-                </a>
-                <ul class="nav nav-treeview">
-                  <li class="nav-item">
-                    <a href="#" class="nav-link">
-                      <i class="nav-icon bi bi-circle"></i>
-                      <p>Level 2</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="#" class="nav-link">
-                      <i class="nav-icon bi bi-circle"></i>
-                      <p>
-                        Level 2
-                        <i class="nav-arrow bi bi-chevron-right"></i>
-                      </p>
-                    </a>
-                    <ul class="nav nav-treeview">
-                      <li class="nav-item">
-                        <a href="#" class="nav-link">
-                          <i class="nav-icon bi bi-record-circle-fill"></i>
-                          <p>Level 3</p>
-                        </a>
-                      </li>
-                      <li class="nav-item">
-                        <a href="#" class="nav-link">
-                          <i class="nav-icon bi bi-record-circle-fill"></i>
-                          <p>Level 3</p>
-                        </a>
-                      </li>
-                      <li class="nav-item">
-                        <a href="#" class="nav-link">
-                          <i class="nav-icon bi bi-record-circle-fill"></i>
-                          <p>Level 3</p>
-                        </a>
-                      </li>
-                    </ul>
-                  </li>
-                  <li class="nav-item">
-                    <a href="#" class="nav-link">
-                      <i class="nav-icon bi bi-circle"></i>
-                      <p>Level 2</p>
-                    </a>
-                  </li>
-                </ul>
-              </li>
-              <li class="nav-item">
-                <a href="#" class="nav-link">
-                  <i class="nav-icon bi bi-circle-fill"></i>
-                  <p>Level 1</p>
-                </a>
-              </li>
-              <li class="nav-header">LABELS</li>
-              <li class="nav-item">
-                <a href="#" class="nav-link">
-                  <i class="nav-icon bi bi-circle text-danger"></i>
-                  <p class="text">Important</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="#" class="nav-link">
-                  <i class="nav-icon bi bi-circle text-warning"></i>
-                  <p>Warning</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="#" class="nav-link">
-                  <i class="nav-icon bi bi-circle text-info"></i>
-                  <p>Informational</p>
-                </a>
-              </li>
+            
+             
+             
             </ul>
             <!--end::Sidebar Menu-->
           </nav>
@@ -698,11 +330,11 @@
           <div class="container-fluid">
             <!--begin::Row-->
             <div class="row">
-              <div class="col-sm-6"><h3 class="mb-0">Dashboard v2</h3></div>
+              <div class="col-sm-6"><h3 class="mb-0">Super Admin Dashboard</h3></div>
               <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-end">
                   <li class="breadcrumb-item"><a href="#">Home</a></li>
-                  <li class="breadcrumb-item active" aria-current="page">Dashboard v2</li>
+                  <li class="breadcrumb-item active" aria-current="page">Super Admin Dashboard</li>
                 </ol>
               </div>
             </div>
@@ -721,10 +353,9 @@
                     <i class="bi bi-gear-fill"></i>
                   </span>
                   <div class="info-box-content">
-                    <span class="info-box-text">CPU Traffic</span>
+                    <span class="info-box-text">Total Admins</span>
                     <span class="info-box-number">
-                      10
-                      <small>%</small>
+                       <h3><?php echo $totalAdmins; ?></h3>
                     </span>
                   </div>
                   <!-- /.info-box-content -->
@@ -738,8 +369,9 @@
                     <i class="bi bi-hand-thumbs-up-fill"></i>
                   </span>
                   <div class="info-box-content">
-                    <span class="info-box-text">Likes</span>
-                    <span class="info-box-number">41,410</span>
+                    <span class="info-box-text">Active Admins</span>
+                    <span class="info-box-number"><h3><?php echo $activeAdmins; ?></h3>
+</span>
                   </div>
                   <!-- /.info-box-content -->
                 </div>
@@ -754,8 +386,9 @@
                     <i class="bi bi-cart-fill"></i>
                   </span>
                   <div class="info-box-content">
-                    <span class="info-box-text">Sales</span>
-                    <span class="info-box-number">760</span>
+                    <span class="info-box-text"> Inactive Admins</span>
+                    <span class="info-box-number"> <h3><?php echo $inactiveAdmins; ?></h3>
+</span>
                   </div>
                   <!-- /.info-box-content -->
                 </div>
@@ -768,14 +401,116 @@
                     <i class="bi bi-people-fill"></i>
                   </span>
                   <div class="info-box-content">
-                    <span class="info-box-text">New Members</span>
-                    <span class="info-box-number">2,000</span>
+                    <span class="info-box-text">Super Admin</span>
+                    <span class="info-box-number"> <h3><?php echo $superAdmins; ?></h3>
+</span>
                   </div>
                   <!-- /.info-box-content -->
                 </div>
                 <!-- /.info-box -->
               </div>
               <!-- /.col -->
+            </div>
+              <!-- Administrator List -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Administrator List</h3>
+                            <div class="card-tools">
+                                <?php echo $this->Html->link(
+                                    '<i class="fas fa-plus"></i> Add Admin',
+                                    array('controller' => 'users', 'action' => 'add_admin'),
+                                    array('class' => 'btn btn-primary btn-sm', 'escape' => false)
+                                ); ?>
+                            </div>
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body table-responsive p-0">
+                            <table class="table table-hover text-nowrap">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Full Name</th>
+                                        <th>Username</th>
+                                        <th>Email</th>
+                                        <th>Role</th>
+                                        <th>Last Login</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php if (empty($admins)): ?>
+                                        <tr>
+                                            <td colspan="8" class="text-center">No administrators found</td>
+                                        </tr>
+                                    <?php else: ?>
+                                        <?php foreach ($admins as $admin): ?>
+                                            <tr>
+                                                <td><?php echo h($admin['User']['id']); ?></td>
+                                                <td><?php echo h($admin['User']['full_name']); ?></td>
+                                                <td><?php echo h($admin['User']['username']); ?></td>
+                                                <td><?php echo h($admin['User']['email']); ?></td>
+                                                <td>
+                                                    <?php if ($admin['User']['role'] === 'super_user'): ?>
+                                                        <span class="badge badge-danger">Super Admin</span>
+                                                    <?php else: ?>
+                                                        <span class="badge badge-primary">Admin</span>
+                                                    <?php endif; ?>
+                                                </td>
+                                                <td><?php echo h($admin['User']['modified']); ?></td>
+                                                <td>
+                                                    <?php if ($admin['User']['status'] == 1): ?>
+                                                        <span class="badge badge-success">Active</span>
+                                                    <?php else: ?>
+                                                        <span class="badge badge-secondary">Inactive</span>
+                                                    <?php endif; ?>
+                                                </td>
+                                                <td>
+                                                    <div class="btn-group">
+                                                        <?php echo $this->Html->link(
+                                                            '<i class="fas fa-eye"></i>',
+                                                            array('controller' => 'users', 'action' => 'view', $admin['User']['id']),
+                                                            array('class' => 'btn btn-info btn-sm', 'escape' => false, 'title' => 'View')
+                                                        ); ?>
+                                                        
+                                                        <?php echo $this->Html->link(
+                                                            '<i class="fas fa-edit"></i>',
+                                                            array('controller' => 'users', 'action' => 'edit', $admin['User']['id']),
+                                                            array('class' => 'btn btn-warning btn-sm', 'escape' => false, 'title' => 'Edit')
+                                                        ); ?>
+                                                        
+                                                        <?php if ($admin['User']['id'] != $this->Session->read('Auth.User.id')): ?>
+                                                            <?php echo $this->Form->postLink(
+                                                                '<i class="fas fa-trash"></i>',
+                                                                array('controller' => 'users', 'action' => 'delete', $admin['User']['id']),
+                                                                array('class' => 'btn btn-danger btn-sm', 'escape' => false, 'title' => 'Delete'),
+                                                                'Are you sure you want to delete this administrator?'
+                                                            ); ?>
+                                                            
+                                                            <?php echo $this->Form->postLink(
+                                                                $admin['User']['status'] == 1 ? '<i class="fas fa-toggle-on"></i>' : '<i class="fas fa-toggle-off"></i>',
+                                                                array('controller' => 'users', 'action' => 'toggle_status', $admin['User']['id']),
+                                                                array(
+                                                                    'class' => 'btn btn-' . ($admin['User']['status'] == 1 ? 'success' : 'secondary') . ' btn-sm',
+                                                                    'escape' => false,
+                                                                    'title' => $admin['User']['status'] == 1 ? 'Deactivate' : 'Activate'
+                                                                )
+                                                            ); ?>
+                                                        <?php endif; ?>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        <?php endforeach; ?>
+                                    <?php endif; ?>
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                    <!-- /.card -->
+                </div>
             </div>
             <!-- /.row -->
             <!--begin::Row-->
@@ -915,409 +650,7 @@
             <div class="row">
               <!-- Start col -->
               <div class="col-md-8">
-                <!--begin::Row-->
-                <div class="row g-4 mb-4">
-                  <div class="col-md-6">
-                    <!-- DIRECT CHAT -->
-                    <div class="card direct-chat direct-chat-warning">
-                      <div class="card-header">
-                        <h3 class="card-title">Direct Chat</h3>
-                        <div class="card-tools">
-                          <span title="3 New Messages" class="badge text-bg-warning"> 3 </span>
-                          <button
-                            type="button"
-                            class="btn btn-tool"
-                            data-lte-toggle="card-collapse"
-                          >
-                            <i data-lte-icon="expand" class="bi bi-plus-lg"></i>
-                            <i data-lte-icon="collapse" class="bi bi-dash-lg"></i>
-                          </button>
-                          <button
-                            type="button"
-                            class="btn btn-tool"
-                            title="Contacts"
-                            data-lte-toggle="chat-pane"
-                          >
-                            <i class="bi bi-chat-text-fill"></i>
-                          </button>
-                          <button type="button" class="btn btn-tool" data-lte-toggle="card-remove">
-                            <i class="bi bi-x-lg"></i>
-                          </button>
-                        </div>
-                      </div>
-                      <!-- /.card-header -->
-                      <div class="card-body">
-                        <!-- Conversations are loaded here -->
-                        <div class="direct-chat-messages">
-                          <!-- Message. Default to the start -->
-                          <div class="direct-chat-msg">
-                            <div class="direct-chat-infos clearfix">
-                              <span class="direct-chat-name float-start">   <span>Welcome, <?php echo h($user['full_name']); ?> (Super User)</span> </span>
-                              <span class="direct-chat-timestamp float-end"> 23 Jan 2:00 pm </span>
-                            </div>
-                            <!-- /.direct-chat-infos -->
-                            <img
-                              class="direct-chat-img"
-                              src="./assets/img/user1-128x128.jpg"
-                              alt="message user image"
-                            />
-                            <!-- /.direct-chat-img -->
-                            <div class="direct-chat-text">
-                              Is this template really for free? That's unbelievable!
-                            </div>
-                            <!-- /.direct-chat-text -->
-                          </div>
-                          <!-- /.direct-chat-msg -->
-                          <!-- Message to the end -->
-                          <div class="direct-chat-msg end">
-                            <div class="direct-chat-infos clearfix">
-                              <span class="direct-chat-name float-end"> Sarah Bullock </span>
-                              <span class="direct-chat-timestamp float-start">
-                                23 Jan 2:05 pm
-                              </span>
-                            </div>
-                            <!-- /.direct-chat-infos -->
-                            <img
-                              class="direct-chat-img"
-                              src="./assets/img/user3-128x128.jpg"
-                              alt="message user image"
-                            />
-                            <!-- /.direct-chat-img -->
-                            <div class="direct-chat-text">You better believe it!</div>
-                            <!-- /.direct-chat-text -->
-                          </div>
-                          <!-- /.direct-chat-msg -->
-                          <!-- Message. Default to the start -->
-                          <div class="direct-chat-msg">
-                            <div class="direct-chat-infos clearfix">
-                              <span class="direct-chat-name float-start">   <span>Welcome, <?php echo h($user['full_name']); ?> (Super User)</span> </span>
-                              <span class="direct-chat-timestamp float-end"> 23 Jan 5:37 pm </span>
-                            </div>
-                            <!-- /.direct-chat-infos -->
-                            <img
-                              class="direct-chat-img"
-                              src="./assets/img/user1-128x128.jpg"
-                              alt="message user image"
-                            />
-                            <!-- /.direct-chat-img -->
-                            <div class="direct-chat-text">
-                              Working with AdminLTE on a great new app! Wanna join?
-                            </div>
-                            <!-- /.direct-chat-text -->
-                          </div>
-                          <!-- /.direct-chat-msg -->
-                          <!-- Message to the end -->
-                          <div class="direct-chat-msg end">
-                            <div class="direct-chat-infos clearfix">
-                              <span class="direct-chat-name float-end"> Sarah Bullock </span>
-                              <span class="direct-chat-timestamp float-start">
-                                23 Jan 6:10 pm
-                              </span>
-                            </div>
-                            <!-- /.direct-chat-infos -->
-                            <img
-                              class="direct-chat-img"
-                              src="./assets/img/user3-128x128.jpg"
-                              alt="message user image"
-                            />
-                            <!-- /.direct-chat-img -->
-                            <div class="direct-chat-text">I would love to.</div>
-                            <!-- /.direct-chat-text -->
-                          </div>
-                          <!-- /.direct-chat-msg -->
-                        </div>
-                        <!-- /.direct-chat-messages-->
-                        <!-- Contacts are loaded here -->
-                        <div class="direct-chat-contacts">
-                          <ul class="contacts-list">
-                            <li>
-                              <a href="#">
-                                <img
-                                  class="contacts-list-img"
-                                  src="./assets/img/user1-128x128.jpg"
-                                  alt="User Avatar"
-                                />
-                                <div class="contacts-list-info">
-                                  <span class="contacts-list-name">
-                                    Count Dracula
-                                    <small class="contacts-list-date float-end"> 2/28/2023 </small>
-                                  </span>
-                                  <span class="contacts-list-msg">
-                                    How have you been? I was...
-                                  </span>
-                                </div>
-                                <!-- /.contacts-list-info -->
-                              </a>
-                            </li>
-                            <!-- End Contact Item -->
-                            <li>
-                              <a href="#">
-                                <img
-                                  class="contacts-list-img"
-                                  src="./assets/img/user7-128x128.jpg"
-                                  alt="User Avatar"
-                                />
-                                <div class="contacts-list-info">
-                                  <span class="contacts-list-name">
-                                    Sarah Doe
-                                    <small class="contacts-list-date float-end"> 2/23/2023 </small>
-                                  </span>
-                                  <span class="contacts-list-msg"> I will be waiting for... </span>
-                                </div>
-                                <!-- /.contacts-list-info -->
-                              </a>
-                            </li>
-                            <!-- End Contact Item -->
-                            <li>
-                              <a href="#">
-                                <img
-                                  class="contacts-list-img"
-                                  src="./assets/img/user3-128x128.jpg"
-                                  alt="User Avatar"
-                                />
-                                <div class="contacts-list-info">
-                                  <span class="contacts-list-name">
-                                    Nadia Jolie
-                                    <small class="contacts-list-date float-end"> 2/20/2023 </small>
-                                  </span>
-                                  <span class="contacts-list-msg"> I'll call you back at... </span>
-                                </div>
-                                <!-- /.contacts-list-info -->
-                              </a>
-                            </li>
-                            <!-- End Contact Item -->
-                            <li>
-                              <a href="#">
-                                <img
-                                  class="contacts-list-img"
-                                  src="./assets/img/user5-128x128.jpg"
-                                  alt="User Avatar"
-                                />
-                                <div class="contacts-list-info">
-                                  <span class="contacts-list-name">
-                                    Nora S. Vans
-                                    <small class="contacts-list-date float-end"> 2/10/2023 </small>
-                                  </span>
-                                  <span class="contacts-list-msg"> Where is your new... </span>
-                                </div>
-                                <!-- /.contacts-list-info -->
-                              </a>
-                            </li>
-                            <!-- End Contact Item -->
-                            <li>
-                              <a href="#">
-                                <img
-                                  class="contacts-list-img"
-                                  src="./assets/img/user6-128x128.jpg"
-                                  alt="User Avatar"
-                                />
-                                <div class="contacts-list-info">
-                                  <span class="contacts-list-name">
-                                    John K.
-                                    <small class="contacts-list-date float-end"> 1/27/2023 </small>
-                                  </span>
-                                  <span class="contacts-list-msg"> Can I take a look at... </span>
-                                </div>
-                                <!-- /.contacts-list-info -->
-                              </a>
-                            </li>
-                            <!-- End Contact Item -->
-                            <li>
-                              <a href="#">
-                                <img
-                                  class="contacts-list-img"
-                                  src="./assets/img/user8-128x128.jpg"
-                                  alt="User Avatar"
-                                />
-                                <div class="contacts-list-info">
-                                  <span class="contacts-list-name">
-                                    Kenneth M.
-                                    <small class="contacts-list-date float-end"> 1/4/2023 </small>
-                                  </span>
-                                  <span class="contacts-list-msg"> Never mind I found... </span>
-                                </div>
-                                <!-- /.contacts-list-info -->
-                              </a>
-                            </li>
-                            <!-- End Contact Item -->
-                          </ul>
-                          <!-- /.contacts-list -->
-                        </div>
-                        <!-- /.direct-chat-pane -->
-                      </div>
-                      <!-- /.card-body -->
-                      <div class="card-footer">
-                        <form action="#" method="post">
-                          <div class="input-group">
-                            <input
-                              type="text"
-                              name="message"
-                              placeholder="Type Message ..."
-                              class="form-control"
-                            />
-                            <span class="input-group-append">
-                              <button type="button" class="btn btn-warning">Send</button>
-                            </span>
-                          </div>
-                        </form>
-                      </div>
-                      <!-- /.card-footer-->
-                    </div>
-                    <!-- /.direct-chat -->
-                  </div>
-                  <!-- /.col -->
-                  <div class="col-md-6">
-                    <!-- USERS LIST -->
-                    <div class="card">
-                      <div class="card-header">
-                        <h3 class="card-title">Latest Members</h3>
-                        <div class="card-tools">
-                          <span class="badge text-bg-danger"> 8 New Members </span>
-                          <button
-                            type="button"
-                            class="btn btn-tool"
-                            data-lte-toggle="card-collapse"
-                          >
-                            <i data-lte-icon="expand" class="bi bi-plus-lg"></i>
-                            <i data-lte-icon="collapse" class="bi bi-dash-lg"></i>
-                          </button>
-                          <button type="button" class="btn btn-tool" data-lte-toggle="card-remove">
-                            <i class="bi bi-x-lg"></i>
-                          </button>
-                        </div>
-                      </div>
-                      <!-- /.card-header -->
-                      <div class="card-body p-0">
-                        <div class="row text-center m-1">
-                          <div class="col-3 p-2">
-                            <img
-                              class="img-fluid rounded-circle"
-                              src="./assets/img/user1-128x128.jpg"
-                              alt="User Image"
-                            />
-                            <a
-                              class="btn fw-bold fs-7 text-secondary text-truncate w-100 p-0"
-                              href="#"
-                            >
-                              <?php echo h($user['full_name']); ?> 
-                            </a>
-                            <div class="fs-8">Today</div>
-                          </div>
-                          <div class="col-3 p-2">
-                            <img
-                              class="img-fluid rounded-circle"
-                              src="./assets/img/user1-128x128.jpg"
-                              alt="User Image"
-                            />
-                            <a
-                              class="btn fw-bold fs-7 text-secondary text-truncate w-100 p-0"
-                              href="#"
-                            >
-                              Norman
-                            </a>
-                            <div class="fs-8">Yesterday</div>
-                          </div>
-                          <div class="col-3 p-2">
-                            <img
-                              class="img-fluid rounded-circle"
-                              src="./assets/img/user7-128x128.jpg"
-                              alt="User Image"
-                            />
-                            <a
-                              class="btn fw-bold fs-7 text-secondary text-truncate w-100 p-0"
-                              href="#"
-                            >
-                              Jane
-                            </a>
-                            <div class="fs-8">12 Jan</div>
-                          </div>
-                          <div class="col-3 p-2">
-                            <img
-                              class="img-fluid rounded-circle"
-                              src="./assets/img/user6-128x128.jpg"
-                              alt="User Image"
-                            />
-                            <a
-                              class="btn fw-bold fs-7 text-secondary text-truncate w-100 p-0"
-                              href="#"
-                            >
-                              John
-                            </a>
-                            <div class="fs-8">12 Jan</div>
-                          </div>
-                          <div class="col-3 p-2">
-                            <img
-                              class="img-fluid rounded-circle"
-                              src="./assets/img/user2-160x160.jpg"
-                              alt="User Image"
-                            />
-                            <a
-                              class="btn fw-bold fs-7 text-secondary text-truncate w-100 p-0"
-                              href="#"
-                            >
-                              Alexander
-                            </a>
-                            <div class="fs-8">13 Jan</div>
-                          </div>
-                          <div class="col-3 p-2">
-                            <img
-                              class="img-fluid rounded-circle"
-                              src="./assets/img/user5-128x128.jpg"
-                              alt="User Image"
-                            />
-                            <a
-                              class="btn fw-bold fs-7 text-secondary text-truncate w-100 p-0"
-                              href="#"
-                            >
-                              Sarah
-                            </a>
-                            <div class="fs-8">14 Jan</div>
-                          </div>
-                          <div class="col-3 p-2">
-                            <img
-                              class="img-fluid rounded-circle"
-                              src="./assets/img/user4-128x128.jpg"
-                              alt="User Image"
-                            />
-                            <a
-                              class="btn fw-bold fs-7 text-secondary text-truncate w-100 p-0"
-                              href="#"
-                            >
-                              Nora
-                            </a>
-                            <div class="fs-8">15 Jan</div>
-                          </div>
-                          <div class="col-3 p-2">
-                            <img
-                              class="img-fluid rounded-circle"
-                              src="./assets/img/user3-128x128.jpg"
-                              alt="User Image"
-                            />
-                            <a
-                              class="btn fw-bold fs-7 text-secondary text-truncate w-100 p-0"
-                              href="#"
-                            >
-                              Nadia
-                            </a>
-                            <div class="fs-8">15 Jan</div>
-                          </div>
-                        </div>
-                        <!-- /.users-list -->
-                      </div>
-                      <!-- /.card-body -->
-                      <div class="card-footer text-center">
-                        <a
-                          href="javascript:"
-                          class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"
-                          >View All Users</a
-                        >
-                      </div>
-                      <!-- /.card-footer -->
-                    </div>
-                    <!-- /.card -->
-                  </div>
-                  <!-- /.col -->
-                </div>
+              
                 <!--end::Row-->
                 <!--begin::Latest Order Widget-->
                 <div class="card">
@@ -1486,154 +819,9 @@
                   </div>
                   <!-- /.info-box-content -->
                 </div>
-                <!-- /.info-box -->
-                <div class="card mb-4">
-                  <div class="card-header">
-                    <h3 class="card-title">Browser Usage</h3>
-                    <div class="card-tools">
-                      <button type="button" class="btn btn-tool" data-lte-toggle="card-collapse">
-                        <i data-lte-icon="expand" class="bi bi-plus-lg"></i>
-                        <i data-lte-icon="collapse" class="bi bi-dash-lg"></i>
-                      </button>
-                      <button type="button" class="btn btn-tool" data-lte-toggle="card-remove">
-                        <i class="bi bi-x-lg"></i>
-                      </button>
-                    </div>
-                  </div>
-                  <!-- /.card-header -->
-                  <div class="card-body">
-                    <!--begin::Row-->
-                    <div class="row">
-                      <div class="col-12"><div id="pie-chart"></div></div>
-                      <!-- /.col -->
-                    </div>
-                    <!--end::Row-->
-                  </div>
-                  <!-- /.card-body -->
-                  <div class="card-footer p-0">
-                    <ul class="nav nav-pills flex-column">
-                      <li class="nav-item">
-                        <a href="#" class="nav-link">
-                          United States of America
-                          <span class="float-end text-danger">
-                            <i class="bi bi-arrow-down fs-7"></i>
-                            12%
-                          </span>
-                        </a>
-                      </li>
-                      <li class="nav-item">
-                        <a href="#" class="nav-link">
-                          India
-                          <span class="float-end text-success">
-                            <i class="bi bi-arrow-up fs-7"></i> 4%
-                          </span>
-                        </a>
-                      </li>
-                      <li class="nav-item">
-                        <a href="#" class="nav-link">
-                          China
-                          <span class="float-end text-info">
-                            <i class="bi bi-arrow-left fs-7"></i> 0%
-                          </span>
-                        </a>
-                      </li>
-                    </ul>
-                  </div>
-                  <!-- /.footer -->
-                </div>
-                <!-- /.card -->
-                <!-- PRODUCT LIST -->
+            
                 <div class="card">
-                  <div class="card-header">
-                    <h3 class="card-title">Recently Added Products</h3>
-                    <div class="card-tools">
-                      <button type="button" class="btn btn-tool" data-lte-toggle="card-collapse">
-                        <i data-lte-icon="expand" class="bi bi-plus-lg"></i>
-                        <i data-lte-icon="collapse" class="bi bi-dash-lg"></i>
-                      </button>
-                      <button type="button" class="btn btn-tool" data-lte-toggle="card-remove">
-                        <i class="bi bi-x-lg"></i>
-                      </button>
-                    </div>
-                  </div>
-                  <!-- /.card-header -->
-                  <div class="card-body p-0">
-                    <div class="px-2">
-                      <div class="d-flex border-top py-2 px-1">
-                        <div class="col-2">
-                          <img
-                            src="./assets/img/default-150x150.png"
-                            alt="Product Image"
-                            class="img-size-50"
-                          />
-                        </div>
-                        <div class="col-10">
-                          <a href="javascript:void(0)" class="fw-bold">
-                            Samsung TV
-                            <span class="badge text-bg-warning float-end"> $1800 </span>
-                          </a>
-                          <div class="text-truncate">Samsung 32" 1080p 60Hz LED Smart HDTV.</div>
-                        </div>
-                      </div>
-                      <!-- /.item -->
-                      <div class="d-flex border-top py-2 px-1">
-                        <div class="col-2">
-                          <img
-                            src="./assets/img/default-150x150.png"
-                            alt="Product Image"
-                            class="img-size-50"
-                          />
-                        </div>
-                        <div class="col-10">
-                          <a href="javascript:void(0)" class="fw-bold">
-                            Bicycle
-                            <span class="badge text-bg-info float-end"> $700 </span>
-                          </a>
-                          <div class="text-truncate">
-                            26" Mongoose Dolomite Men's 7-speed, Navy Blue.
-                          </div>
-                        </div>
-                      </div>
-                      <!-- /.item -->
-                      <div class="d-flex border-top py-2 px-1">
-                        <div class="col-2">
-                          <img
-                            src="./assets/img/default-150x150.png"
-                            alt="Product Image"
-                            class="img-size-50"
-                          />
-                        </div>
-                        <div class="col-10">
-                          <a href="javascript:void(0)" class="fw-bold">
-                            Xbox One
-                            <span class="badge text-bg-danger float-end"> $350 </span>
-                          </a>
-                          <div class="text-truncate">
-                            Xbox One Console Bundle with Halo Master Chief Collection.
-                          </div>
-                        </div>
-                      </div>
-                      <!-- /.item -->
-                      <div class="d-flex border-top py-2 px-1">
-                        <div class="col-2">
-                          <img
-                            src="./assets/img/default-150x150.png"
-                            alt="Product Image"
-                            class="img-size-50"
-                          />
-                        </div>
-                        <div class="col-10">
-                          <a href="javascript:void(0)" class="fw-bold">
-                            PlayStation 4
-                            <span class="badge text-bg-success float-end"> $399 </span>
-                          </a>
-                          <div class="text-truncate">PlayStation 4 500GB Console (PS4)</div>
-                        </div>
-                      </div>
-                      <!-- /.item -->
-                    </div>
-                  </div>
-                  <!-- /.card-body -->
+                                <!-- /.card-body -->
                   <div class="card-footer text-center">
                     <a href="javascript:void(0)" class="uppercase"> View All Products </a>
                   </div>
@@ -1668,23 +856,31 @@
     <!--end::App Wrapper-->
     <!--begin::Script-->
     <!--begin::Third Party Plugin(OverlayScrollbars)-->
+   <?php $this->start('script'); ?>
     <script
       src="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/browser/overlayscrollbars.browser.es6.min.js"
       crossorigin="anonymous"
     ></script>
+     <?php $this->end(); ?>
     <!--end::Third Party Plugin(OverlayScrollbars)--><!--begin::Required Plugin(popperjs for Bootstrap 5)-->
+    <?php $this->start('script'); ?>
     <script
       src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
       crossorigin="anonymous"
     ></script>
+     <?php $this->end(); ?>
     <!--end::Required Plugin(popperjs for Bootstrap 5)--><!--begin::Required Plugin(Bootstrap 5)-->
+    <?php $this->start('script'); ?>
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.min.js"
       crossorigin="anonymous"
     ></script>
+    <?php $this->end(); ?>s
     <!--end::Required Plugin(Bootstrap 5)--><!--begin::Required Plugin(AdminLTE)-->
-    <script src="./js/adminlte.js"></script>
+    
+   <?= $this->Html->script('adminlte.min'); ?>  
     <!--end::Required Plugin(AdminLTE)--><!--begin::OverlayScrollbars Configure-->
+    <?php $this->start('script'); ?>
     <script>
       const SELECTOR_SIDEBAR_WRAPPER = '.sidebar-wrapper';
       const Default = {
@@ -1705,14 +901,18 @@
         }
       });
     </script>
+    <?php $this->end(); ?>
     <!--end::OverlayScrollbars Configure-->
     <!-- OPTIONAL SCRIPTS -->
     <!-- apexcharts -->
+     <?php $this->start('script'); ?>
     <script
       src="https://cdn.jsdelivr.net/npm/apexcharts@3.37.1/dist/apexcharts.min.js"
       integrity="sha256-+vh8GkaU7C9/wbSLIcwq82tQ2wTf44aOHA8HlBMwRI8="
       crossorigin="anonymous"
     ></script>
+    <?php $this->end(); ?>
+    <?php $this->start('script'); ?>
     <script>
       // NOTICE!! DO NOT USE ANY OF THIS JAVASCRIPT
       // IT'S ALL JUST JUNK FOR DEMO
@@ -1862,6 +1062,7 @@
       // - END PIE CHART -
       //-----------------
     </script>
+    <?php $this->end(); ?>
     <!--end::Script-->
   </body>
   <!--end::Body-->

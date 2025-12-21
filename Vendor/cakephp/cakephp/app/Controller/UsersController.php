@@ -1,6 +1,6 @@
 <?php
 /**
- * Users Controller
+ * Users Controller - Enhanced with Super Admin functionality
  */
 App::uses('AppController', 'Controller');
 App::uses('BlowfishPasswordHasher', 'Controller/Component/Auth');
@@ -13,170 +13,472 @@ class UsersController extends AppController {
     }
 
     /**
-     * Login action - Web interface
+     * Check if current user is super admin
      */
- /**
- * Login action - Web interface
- */
-public function login() {
-    // If already logged in, redirect to dashboard
-    if ($this->Auth->user()) {
-        $role = $this->Auth->user('role');
-        return $this->redirect($this->_getDashboardUrl($role));
+    private function _isSuperAdmin() {
+        return ($this->Auth->user('role') === 'super_user');
     }
-
-    // Get role from POST or session (for preserving after failed login)
-    $selectedRole = null;
-    if ($this->request->is('post')) {
-        // Store selected role in session for form re-population
-        if (isset($this->request->data['User']['role'])) {
-            $selectedRole = $this->request->data['User']['role'];
-            $this->Session->write('login.selected_role', $selectedRole);
-        }
-    } else {
-        // Get role from session (for form re-population after failed login)
-        $selectedRole = $this->Session->read('login.selected_role');
-    }
-
-    // Pass selected role to view
-    $this->set('selectedRole', $selectedRole ?: 'user');
-
-    if ($this->request->is('post')) {
-        // Check if this is an API request
-        if ($this->RequestHandler->prefers('json') || $this->request->header('Accept') === 'application/json') {
-            return $this->_apiLogin();
-        }
-
-        $email = isset($this->request->data['User']['email']) ? $this->request->data['User']['email'] : '';
-        $password = isset($this->request->data['User']['password']) ? $this->request->data['User']['password'] : '';
-        $role = isset($this->request->data['User']['role']) ? $this->request->data['User']['role'] : 'user';
-        $accessCode = isset($this->request->data['User']['access_code']) ? $this->request->data['User']['access_code'] : null;
-        $rememberMe = isset($this->request->data['User']['remember_me']) ? $this->request->data['User']['remember_me'] : false;
-
-        // Validate required fields
-        if (empty($email) || empty($password)) {
-            $this->Session->setFlash('Please enter valid Email ID', 'default', array('class' => 'error'));
-            return;
-        }
-
-        // Find user
-        $user = $this->User->find('first', array(
-            'conditions' => array('User.email' => $email),
-            'fields' => array('id', 'email', 'password', 'role', 'access_code', 'full_name', 'username')
-        ));
-
-        if (!$user) {
-            $this->Session->setFlash('The email address or password is incorrect. Please try again or reset your password', 'default', array('class' => 'error'));
-            return;
-        }
-
-        // Verify password
-        $passwordHasher = new BlowfishPasswordHasher();
-        if (!$passwordHasher->check($password, $user['User']['password'])) {
-            $this->Session->setFlash('The email address or password is incorrect. Please try again or reset your password', 'default', array('class' => 'error'));
-            return;
-        }
-
-        // Verify role matches
-        if ($user['User']['role'] !== $role) {
-            $this->Session->setFlash('Invalid user role. Please select the correct role from the dropdown.', 'default', array('class' => 'error'));
-            return;
-        }
-
-        // Verify access code for admin and super_user
-        if (in_array($role, array('admin', 'super_user'))) {
-            if (empty($accessCode)) {
-                $this->Session->setFlash('Access code is required for ' . ucwords(str_replace('_', ' ', $role)), 'default', array('class' => 'error'));
-                return;
-            }
-
-            if (!$passwordHasher->check($accessCode, $user['User']['access_code'])) {
-                $this->Session->setFlash('Invalid access code. Please try again.', 'default', array('class' => 'error'));
-                return;
-            }
-        }
-
-        // Handle remember me
-        if ($rememberMe) {
-            $token = Security::hash(uniqid(rand(), true));
-            $this->User->id = $user['User']['id'];
-            $this->User->saveField('remember_token', $token);
-            $this->Cookie->write('remember_token', $token, true, '+2 weeks');
-        }
-
-        // Clear session role storage on successful login
-        $this->Session->delete('login.selected_role');
-        
-        // Login successful
-        $this->Auth->login($user['User']);
-        $this->Session->write('Auth.User', $user['User']);
-        $this->Session->write('Auth.User.role', $user['User']['role']);
-
-        // Redirect based on role
-        return $this->redirect($this->_getDashboardUrl($role));
-    }
-}
 
     /**
-     * API Login
+     * Check if current user is admin or super admin
      */
-    private function _apiLogin() {
-        $email = $this->request->data['email'];
-        $password = $this->request->data['password'];
-        $role = isset($this->request->data['role']) ? $this->request->data['role'] : 'user';
-        $accessCode = isset($this->request->data['access_code']) ? $this->request->data['access_code'] : null;
+    private function _isAdminOrAbove() {
+        $role = $this->Auth->user('role');
+        return in_array($role, array('admin', 'super_user'));
+    }
 
-        // Validate required fields
-        if (empty($email) || empty($password)) {
-            return $this->_sendJsonResponse(false, 'Please enter valid Email ID');
+    /**
+     * Dashboard action
+     */
+    public function dashboard() {
+        if (!$this->Auth->user()) {
+            return $this->redirect(array('action' => 'login'));
         }
 
-        // Find user
-        $user = $this->User->find('first', array(
-            'conditions' => array('User.email' => $email),
-            'fields' => array('id', 'email', 'password', 'role', 'access_code', 'full_name', 'username')
+        $role = $this->Auth->user('role');
+        $this->set('role', $role);
+        $this->set('user', $this->Auth->user());
+
+        // Load role-specific view
+        switch ($role) {
+            case 'super_user':
+                return $this->_superAdminDashboard();
+            case 'admin':
+                $this->render('dashboard_admin');
+                break;
+            case 'guest':
+                $this->render('dashboard_guest');
+                break;
+            default:
+                $this->render('dashboard_user');
+        }
+    }
+
+    /**
+     * Super Admin Dashboard
+     */
+    private function _superAdminDashboard() {
+        // Get statistics
+        $totalAdmins = $this->User->find('count', array(
+            'conditions' => array('User.role' => array('admin', 'super_user'))
         ));
 
-        if (!$user) {
-            return $this->_sendJsonResponse(false, 'The email address or password is incorrect');
-        }
+        $activeAdmins = $this->User->find('count', array(
+            'conditions' => array(
+                'User.role' => array('admin', 'super_user'),
+                'User.status' => 1
+            )
+        ));
 
-        // Verify password
-        $passwordHasher = new BlowfishPasswordHasher();
-        if (!$passwordHasher->check($password, $user['User']['password'])) {
-            return $this->_sendJsonResponse(false, 'The email address or password is incorrect');
-        }
+        $inactiveAdmins = $totalAdmins - $activeAdmins;
 
-        // Verify role matches
-        if ($user['User']['role'] !== $role) {
-            return $this->_sendJsonResponse(false, 'Invalid user role');
-        }
+        $superAdmins = $this->User->find('count', array(
+            'conditions' => array('User.role' => 'super_user')
+        ));
 
-        // Verify access code for admin and super_user
-        if (in_array($role, array('admin', 'super_user'))) {
-            if (empty($accessCode)) {
-                return $this->_sendJsonResponse(false, 'Access code is required');
-            }
+        $totalUsers = $this->User->find('count', array(
+            'conditions' => array('User.role' => array('user', 'guest'))
+        ));
 
-            if (!$passwordHasher->check($accessCode, $user['User']['access_code'])) {
-                return $this->_sendJsonResponse(false, 'Invalid access code');
-            }
-        }
-
-        // Generate token
-        $token = Security::hash(uniqid(rand(), true));
-        
-        return $this->_sendJsonResponse(true, 'Login successful', array(
-            'token' => $token,
-            'user' => array(
-                'id' => $user['User']['id'],
-                'email' => $user['User']['email'],
-                'role' => $user['User']['role'],
-                'full_name' => $user['User']['full_name'],
-                'username' => $user['User']['username']
+        // Get all admins with their details
+        $admins = $this->User->find('all', array(
+            'conditions' => array('User.role' => array('admin', 'super_user')),
+            'fields' => array(
+                'User.id', 'User.full_name', 'User.username', 'User.email', 
+                'User.role', 'User.status', 'User.modified'
             ),
-            'redirect' => $this->_getDashboardUrl($role)
+            'order' => array('User.id' => 'ASC')
         ));
+
+        $this->set(compact(
+            'totalAdmins', 'activeAdmins', 'inactiveAdmins', 
+            'superAdmins', 'totalUsers', 'admins'
+        ));
+
+        $this->render('dashboard_super_user');
+    }
+
+    /**
+     * View all users (Super Admin only)
+     */
+    public function manage_users() {
+        if (!$this->_isSuperAdmin()) {
+            $this->Session->setFlash('You are not authorized to access this page.', 'default', array('class' => 'error'));
+            return $this->redirect(array('action' => 'dashboard'));
+        }
+
+        $users = $this->User->find('all', array(
+            'conditions' => array('User.role' => array('user', 'guest')),
+            'fields' => array(
+                'User.id', 'User.full_name', 'User.username', 'User.email', 
+                'User.role', 'User.status', 'User.created', 'User.modified'
+            ),
+            'order' => array('User.id' => 'DESC')
+        ));
+
+        $this->set('users', $users);
+    }
+
+    /**
+     * Add Admin (Super Admin only)
+     */
+    public function add_admin() {
+        if (!$this->_isSuperAdmin()) {
+            $this->Session->setFlash('You are not authorized to access this page.', 'default', array('class' => 'error'));
+            return $this->redirect(array('action' => 'dashboard'));
+        }
+
+        if ($this->request->is('post')) {
+            $this->User->create();
+            
+            $data = $this->request->data['User'];
+            
+            // Validate required fields
+            if (empty($data['full_name']) || empty($data['username']) || 
+                empty($data['email']) || empty($data['password'])) {
+                $this->Session->setFlash('Please fill in all required fields.', 'default', array('class' => 'error'));
+                return;
+            }
+
+            // Generate access code if admin
+            $passwordHasher = new BlowfishPasswordHasher();
+            if ($data['role'] === 'admin' || $data['role'] === 'super_user') {
+                // Generate random 4-digit access code
+                $accessCode = str_pad(rand(0, 9999), 4, '0', STR_PAD_LEFT);
+                $data['access_code'] = $passwordHasher->hash($accessCode);
+                $plainAccessCode = $accessCode; // Store for display
+            } else {
+                $data['access_code'] = null;
+                $plainAccessCode = null;
+            }
+
+            // Set default status
+            $data['status'] = 1;
+
+            if ($this->User->save(array('User' => $data))) {
+                $message = 'Admin created successfully!';
+                if ($plainAccessCode) {
+                    $message .= ' Access Code: ' . $plainAccessCode . ' (Save this, it won\'t be shown again)';
+                }
+                $this->Session->setFlash($message, 'default', array('class' => 'success'));
+                return $this->redirect(array('action' => 'dashboard'));
+            } else {
+                $errors = $this->User->validationErrors;
+                $errorMsg = 'Failed to create admin.';
+                
+                if (isset($errors['email'])) {
+                    $errorMsg = 'This email address is already registered.';
+                } elseif (isset($errors['username'])) {
+                    $errorMsg = 'This username is already taken.';
+                }
+                
+                $this->Session->setFlash($errorMsg, 'default', array('class' => 'error'));
+            }
+        }
+    }
+
+    /**
+     * View User Details (Super Admin/Admin)
+     */
+    public function view($id = null) {
+        if (!$this->_isAdminOrAbove()) {
+            $this->Session->setFlash('You are not authorized to access this page.', 'default', array('class' => 'error'));
+            return $this->redirect(array('action' => 'dashboard'));
+        }
+
+        if (!$id) {
+            $this->Session->setFlash('Invalid user ID.', 'default', array('class' => 'error'));
+            return $this->redirect(array('action' => 'dashboard'));
+        }
+
+        $user = $this->User->findById($id);
+        
+        if (!$user) {
+            $this->Session->setFlash('User not found.', 'default', array('class' => 'error'));
+            return $this->redirect(array('action' => 'dashboard'));
+        }
+
+        $this->set('user', $user);
+    }
+
+    /**
+     * Edit User (Super Admin only)
+     */
+    public function edit($id = null) {
+        if (!$this->_isSuperAdmin()) {
+            $this->Session->setFlash('You are not authorized to access this page.', 'default', array('class' => 'error'));
+            return $this->redirect(array('action' => 'dashboard'));
+        }
+
+        if (!$id) {
+            $this->Session->setFlash('Invalid user ID.', 'default', array('class' => 'error'));
+            return $this->redirect(array('action' => 'dashboard'));
+        }
+
+        $user = $this->User->findById($id);
+        
+        if (!$user) {
+            $this->Session->setFlash('User not found.', 'default', array('class' => 'error'));
+            return $this->redirect(array('action' => 'dashboard'));
+        }
+
+        if ($this->request->is(array('post', 'put'))) {
+            $data = $this->request->data['User'];
+            
+            // Don't allow editing of own super_user role
+            if ($id == $this->Auth->user('id') && $user['User']['role'] === 'super_user') {
+                unset($data['role']);
+            }
+
+            // If password is empty, don't update it
+            if (empty($data['password'])) {
+                unset($data['password']);
+            }
+
+            // Handle access code regeneration
+            if (isset($data['regenerate_access_code']) && $data['regenerate_access_code']) {
+                if (in_array($data['role'], array('admin', 'super_user'))) {
+                    $passwordHasher = new BlowfishPasswordHasher();
+                    $accessCode = str_pad(rand(0, 9999), 4, '0', STR_PAD_LEFT);
+                    $data['access_code'] = $passwordHasher->hash($accessCode);
+                    $this->Session->write('new_access_code', $accessCode);
+                }
+            }
+
+            $this->User->id = $id;
+            if ($this->User->save(array('User' => $data))) {
+                $message = 'User updated successfully!';
+                if ($this->Session->check('new_access_code')) {
+                    $message .= ' New Access Code: ' . $this->Session->read('new_access_code');
+                    $this->Session->delete('new_access_code');
+                }
+                $this->Session->setFlash($message, 'default', array('class' => 'success'));
+                return $this->redirect(array('action' => 'dashboard'));
+            } else {
+                $this->Session->setFlash('Failed to update user.', 'default', array('class' => 'error'));
+            }
+        }
+
+        if (!$this->request->data) {
+            $this->request->data = $user;
+            // Don't send password to view
+            unset($this->request->data['User']['password']);
+        }
+
+        $this->set('user', $user);
+    }
+
+    /**
+     * Delete User (Super Admin only)
+     */
+    public function delete($id = null) {
+        if (!$this->_isSuperAdmin()) {
+            $this->Session->setFlash('You are not authorized to access this page.', 'default', array('class' => 'error'));
+            return $this->redirect(array('action' => 'dashboard'));
+        }
+
+        if (!$id) {
+            $this->Session->setFlash('Invalid user ID.', 'default', array('class' => 'error'));
+            return $this->redirect(array('action' => 'dashboard'));
+        }
+
+        // Prevent deleting yourself
+        if ($id == $this->Auth->user('id')) {
+            $this->Session->setFlash('You cannot delete your own account.', 'default', array('class' => 'error'));
+            return $this->redirect(array('action' => 'dashboard'));
+        }
+
+        $user = $this->User->findById($id);
+        
+        if (!$user) {
+            $this->Session->setFlash('User not found.', 'default', array('class' => 'error'));
+            return $this->redirect(array('action' => 'dashboard'));
+        }
+
+        if ($this->User->delete($id)) {
+            $this->Session->setFlash('User deleted successfully!', 'default', array('class' => 'success'));
+        } else {
+            $this->Session->setFlash('Failed to delete user.', 'default', array('class' => 'error'));
+        }
+
+        return $this->redirect(array('action' => 'dashboard'));
+    }
+
+    /**
+     * Toggle User Status (Super Admin only)
+     */
+    public function toggle_status($id = null) {
+        if (!$this->_isSuperAdmin()) {
+            $this->Session->setFlash('You are not authorized to perform this action.', 'default', array('class' => 'error'));
+            return $this->redirect(array('action' => 'dashboard'));
+        }
+
+        if (!$id) {
+            $this->Session->setFlash('Invalid user ID.', 'default', array('class' => 'error'));
+            return $this->redirect(array('action' => 'dashboard'));
+        }
+
+        // Prevent toggling own status
+        if ($id == $this->Auth->user('id')) {
+            $this->Session->setFlash('You cannot change your own status.', 'default', array('class' => 'error'));
+            return $this->redirect(array('action' => 'dashboard'));
+        }
+
+        $user = $this->User->findById($id);
+        
+        if (!$user) {
+            $this->Session->setFlash('User not found.', 'default', array('class' => 'error'));
+            return $this->redirect(array('action' => 'dashboard'));
+        }
+
+        $newStatus = ($user['User']['status'] == 1) ? 0 : 1;
+        
+        $this->User->id = $id;
+        if ($this->User->saveField('status', $newStatus)) {
+            $statusText = ($newStatus == 1) ? 'activated' : 'deactivated';
+            $this->Session->setFlash("User {$statusText} successfully!", 'default', array('class' => 'success'));
+        } else {
+            $this->Session->setFlash('Failed to update user status.', 'default', array('class' => 'error'));
+        }
+
+        return $this->redirect(array('action' => 'dashboard'));
+    }
+
+    /**
+     * Regenerate Access Code (Super Admin only)
+     */
+    public function regenerate_access_code($id = null) {
+        if (!$this->_isSuperAdmin()) {
+            $this->Session->setFlash('You are not authorized to perform this action.', 'default', array('class' => 'error'));
+            return $this->redirect(array('action' => 'dashboard'));
+        }
+
+        if (!$id) {
+            $this->Session->setFlash('Invalid user ID.', 'default', array('class' => 'error'));
+            return $this->redirect(array('action' => 'dashboard'));
+        }
+
+        $user = $this->User->findById($id);
+        
+        if (!$user) {
+            $this->Session->setFlash('User not found.', 'default', array('class' => 'error'));
+            return $this->redirect(array('action' => 'dashboard'));
+        }
+
+        // Check if user is admin or super_user
+        if (!in_array($user['User']['role'], array('admin', 'super_user'))) {
+            $this->Session->setFlash('Access code can only be generated for admin users.', 'default', array('class' => 'error'));
+            return $this->redirect(array('action' => 'dashboard'));
+        }
+
+        $passwordHasher = new BlowfishPasswordHasher();
+        $accessCode = str_pad(rand(0, 9999), 4, '0', STR_PAD_LEFT);
+        
+        $this->User->id = $id;
+        if ($this->User->saveField('access_code', $passwordHasher->hash($accessCode))) {
+            $this->Session->setFlash("New access code generated: {$accessCode} (Save this, it won't be shown again)", 'default', array('class' => 'success'));
+        } else {
+            $this->Session->setFlash('Failed to regenerate access code.', 'default', array('class' => 'error'));
+        }
+
+        return $this->redirect(array('action' => 'dashboard'));
+    }
+
+    // ... (keep existing login, signup, logout methods)
+
+    /**
+     * Login action - Web interface
+     */
+    public function login() {
+        // If already logged in, redirect to dashboard
+        if ($this->Auth->user()) {
+            $role = $this->Auth->user('role');
+            return $this->redirect($this->_getDashboardUrl($role));
+        }
+
+        // Get role from POST or session (for preserving after failed login)
+        $selectedRole = null;
+        if ($this->request->is('post')) {
+            if (isset($this->request->data['User']['role'])) {
+                $selectedRole = $this->request->data['User']['role'];
+                $this->Session->write('login.selected_role', $selectedRole);
+            }
+        } else {
+            $selectedRole = $this->Session->read('login.selected_role');
+        }
+
+        $this->set('selectedRole', $selectedRole ?: 'user');
+
+        if ($this->request->is('post')) {
+            if ($this->RequestHandler->prefers('json') || $this->request->header('Accept') === 'application/json') {
+                return $this->_apiLogin();
+            }
+
+            $email = isset($this->request->data['User']['email']) ? $this->request->data['User']['email'] : '';
+            $password = isset($this->request->data['User']['password']) ? $this->request->data['User']['password'] : '';
+            $role = isset($this->request->data['User']['role']) ? $this->request->data['User']['role'] : 'user';
+            $accessCode = isset($this->request->data['User']['access_code']) ? $this->request->data['User']['access_code'] : null;
+            $rememberMe = isset($this->request->data['User']['remember_me']) ? $this->request->data['User']['remember_me'] : false;
+
+            if (empty($email) || empty($password)) {
+                $this->Session->setFlash('Please enter valid Email ID', 'default', array('class' => 'error'));
+                return;
+            }
+
+            $user = $this->User->find('first', array(
+                'conditions' => array('User.email' => $email),
+                'fields' => array('id', 'email', 'password', 'role', 'access_code', 'full_name', 'username', 'status')
+            ));
+
+            if (!$user) {
+                $this->Session->setFlash('The email address or password is incorrect. Please try again or reset your password', 'default', array('class' => 'error'));
+                return;
+            }
+
+            // Check if user is active
+            if ($user['User']['status'] == 0) {
+                $this->Session->setFlash('Your account has been deactivated. Please contact administrator.', 'default', array('class' => 'error'));
+                return;
+            }
+
+            $passwordHasher = new BlowfishPasswordHasher();
+            if (!$passwordHasher->check($password, $user['User']['password'])) {
+                $this->Session->setFlash('The email address or password is incorrect. Please try again or reset your password', 'default', array('class' => 'error'));
+                return;
+            }
+
+            if ($user['User']['role'] !== $role) {
+                $this->Session->setFlash('Invalid user role. Please select the correct role from the dropdown.', 'default', array('class' => 'error'));
+                return;
+            }
+
+            if (in_array($role, array('admin', 'super_user'))) {
+                if (empty($accessCode)) {
+                    $this->Session->setFlash('Access code is required for ' . ucwords(str_replace('_', ' ', $role)), 'default', array('class' => 'error'));
+                    return;
+                }
+
+                if (!$passwordHasher->check($accessCode, $user['User']['access_code'])) {
+                    $this->Session->setFlash('Invalid access code. Please try again.', 'default', array('class' => 'error'));
+                    return;
+                }
+            }
+
+            if ($rememberMe) {
+                $token = Security::hash(uniqid(rand(), true));
+                $this->User->id = $user['User']['id'];
+                $this->User->saveField('remember_token', $token);
+                $this->Cookie->write('remember_token', $token, true, '+2 weeks');
+            }
+
+            $this->Session->delete('login.selected_role');
+            
+            $this->Auth->login($user['User']);
+            $this->Session->write('Auth.User', $user['User']);
+            $this->Session->write('Auth.User.role', $user['User']['role']);
+
+            return $this->redirect($this->_getDashboardUrl($role));
+        }
     }
 
     /**
@@ -184,20 +486,16 @@ public function login() {
      */
     public function signup() {
         if ($this->request->is('post')) {
-            // Check if this is an API request
             if ($this->RequestHandler->prefers('json') || $this->request->header('Accept') === 'application/json') {
                 return $this->_apiSignup();
             }
 
-            // Log the incoming data for debugging
             CakeLog::write('debug', 'Signup POST data: ' . print_r($this->request->data, true));
 
             $this->User->create();
             
-            // Get form data
             $data = isset($this->request->data['User']) ? $this->request->data['User'] : array();
             
-            // Check if data exists
             if (empty($data)) {
                 $this->Session->setFlash('No data received. Please fill in all fields.', 'default', array('class' => 'error'));
                 return;
@@ -205,48 +503,41 @@ public function login() {
             
             $userType = isset($data['user_type']) ? $data['user_type'] : 'user';
             
-            // Validate required fields
             if (empty($data['full_name']) || empty($data['username']) || empty($data['email']) || 
                 empty($data['confirm_email']) || empty($data['password']) || empty($data['confirm_password'])) {
                 $this->Session->setFlash('Please fill in all required fields.', 'default', array('class' => 'error'));
                 return;
             }
             
-            // Validate passwords match
             if ($data['password'] !== $data['confirm_password']) {
                 $this->Session->setFlash('Passwords do not match. Please try again.', 'default', array('class' => 'error'));
                 return;
             }
             
-            // Validate emails match
             if ($data['email'] !== $data['confirm_email']) {
                 $this->Session->setFlash('Email addresses do not match. Please try again.', 'default', array('class' => 'error'));
                 return;
             }
             
-            // Validate access code for admin
             if ($userType === 'admin') {
                 if (empty($data['access_code']) || $data['access_code'] !== '0000') {
                     $this->Session->setFlash('Invalid access code. Please enter the correct code.', 'default', array('class' => 'error'));
                     return;
                 }
                 
-                // Hash the access code
                 $passwordHasher = new BlowfishPasswordHasher();
                 $data['access_code'] = $passwordHasher->hash('0000');
             } else {
                 $data['access_code'] = null;
             }
             
-            // Set role
             $data['role'] = $userType;
+            $data['status'] = 1; // Active by default
             
-            // Remove confirm fields before saving
             unset($data['confirm_password']);
             unset($data['confirm_email']);
             unset($data['user_type']);
             
-            // Prepare data for saving
             $saveData = array('User' => $data);
             
             CakeLog::write('debug', 'Data to save: ' . print_r($saveData, true));
@@ -274,97 +565,11 @@ public function login() {
     }
 
     /**
-     * API Signup
-     */
-    private function _apiSignup() {
-        $this->User->create();
-        
-        $data = $this->request->data;
-        $userType = isset($data['user_type']) ? $data['user_type'] : 'user';
-        
-        // Validate access code for admin
-        if ($userType === 'admin') {
-            if (empty($data['access_code']) || $data['access_code'] !== '0000') {
-                return $this->_sendJsonResponse(false, 'Invalid access code');
-            }
-            
-            // Hash the access code
-            $passwordHasher = new BlowfishPasswordHasher();
-            $data['access_code'] = $passwordHasher->hash('0000');
-        } else {
-            $data['access_code'] = null;
-        }
-        
-        // Set role
-        $data['role'] = $userType;
-        
-        // Validate passwords match
-        if ($data['password'] !== $data['confirm_password']) {
-            return $this->_sendJsonResponse(false, 'Passwords do not match');
-        }
-        
-        // Validate emails match
-        if ($data['email'] !== $data['confirm_email']) {
-            return $this->_sendJsonResponse(false, 'Email addresses do not match');
-        }
-        
-        // Remove confirm fields
-        unset($data['confirm_password']);
-        unset($data['confirm_email']);
-        unset($data['user_type']);
-        
-        if ($this->User->save($data)) {
-            return $this->_sendJsonResponse(true, 'Account created successfully', array(
-                'redirect' => '/login'
-            ));
-        } else {
-            $errors = $this->User->validationErrors;
-            $errorMsg = 'Registration failed';
-            
-            if (isset($errors['email'])) {
-                $errorMsg = 'This email address is already registered';
-            } elseif (isset($errors['username'])) {
-                $errorMsg = 'This username is already taken';
-            }
-            
-            return $this->_sendJsonResponse(false, $errorMsg);
-        }
-    }
-
-    /**
      * Logout action
      */
     public function logout() {
         $this->Cookie->delete('remember_token');
         return $this->redirect($this->Auth->logout());
-    }
-
-    /**
-     * Dashboard action
-     */
-    public function dashboard() {
-        if (!$this->Auth->user()) {
-            return $this->redirect(array('action' => 'login'));
-        }
-
-        $role = $this->Auth->user('role');
-        $this->set('role', $role);
-        $this->set('user', $this->Auth->user());
-
-        // Load role-specific view
-        switch ($role) {
-            case 'admin':
-                $this->render('dashboard_admin');
-                break;
-            case 'super_user':
-                $this->render('dashboard_super_user');
-                break;
-            case 'guest':
-                $this->render('dashboard_guest');
-                break;
-            default:
-                $this->render('dashboard_user');
-        }
     }
 
     /**

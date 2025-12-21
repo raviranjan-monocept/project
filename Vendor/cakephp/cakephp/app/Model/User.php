@@ -1,6 +1,6 @@
 <?php
 /**
- * User Model
+ * User Model - Updated with Status field
  */
 App::uses('AppModel', 'Model');
 App::uses('BlowfishPasswordHasher', 'Controller/Component/Auth');
@@ -65,6 +65,13 @@ class User extends AppModel {
                 'message' => 'Please select a valid role',
                 'allowEmpty' => false
             )
+        ),
+        'status' => array(
+            'boolean' => array(
+                'rule' => 'boolean',
+                'message' => 'Status must be either active or inactive',
+                'allowEmpty' => true
+            )
         )
     );
 
@@ -76,6 +83,11 @@ class User extends AppModel {
         if (isset($this->data[$this->alias]['password'])) {
             $passwordHasher = new BlowfishPasswordHasher();
             $this->data[$this->alias]['password'] = $passwordHasher->hash($this->data[$this->alias]['password']);
+        }
+        
+        // Set default status if not provided
+        if (!$this->id && !isset($this->data[$this->alias]['status'])) {
+            $this->data[$this->alias]['status'] = 1;
         }
         
         // Ensure created and modified timestamps
@@ -110,5 +122,27 @@ class User extends AppModel {
 
         $passwordHasher = new BlowfishPasswordHasher();
         return $passwordHasher->check($code, $user['User']['access_code']);
+    }
+
+    /**
+     * Get active users count by role
+     */
+    public function getActiveUsersByRole($role) {
+        return $this->find('count', array(
+            'conditions' => array(
+                'User.role' => $role,
+                'User.status' => 1
+            )
+        ));
+    }
+
+    /**
+     * Get all users by role
+     */
+    public function getUsersByRole($role) {
+        return $this->find('all', array(
+            'conditions' => array('User.role' => $role),
+            'order' => array('User.created' => 'DESC')
+        ));
     }
 }
