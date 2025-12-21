@@ -38,7 +38,6 @@
                             </button>
                         <div class="dropdown-menu" id="roleDropdownMenu">
                             <a href="#" class="dropdown-item" data-role="user">USER</a>
-                            <a href="#" class="dropdown-item" data-role="guest">GUEST</a>
                             <a href="#" class="dropdown-item" data-role="admin">ADMIN</a>
                             <a href="#" class="dropdown-item" data-role="super_user">SUPER USER</a>
                         </div>
@@ -64,7 +63,6 @@
                         </button>
                         <div class="dropdown-menu" id="roleDropdownMenu">
                             <a href="#" class="dropdown-item" data-role="user">USER</a>
-                            <a href="#" class="dropdown-item" data-role="guest">GUEST</a>
                             <a href="#" class="dropdown-item" data-role="admin">ADMIN</a>
                             <a href="#" class="dropdown-item" data-role="super_user">SUPER USER</a>
                         </div>
