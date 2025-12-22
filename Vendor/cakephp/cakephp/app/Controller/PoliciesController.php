@@ -1,7 +1,7 @@
 <?php
 /**
  * Policies Controller
- * 
+ *
  * File: app/Controller/PoliciesController.php
  */
 App::uses('AppController', 'Controller');
@@ -39,20 +39,19 @@ class PoliciesController extends AppController {
     public function index() {
         $this->set('title_for_layout', 'All Policies');
         
-        // Check if REST API request
+        // API request → JSON list
         if ($this->request->is('api') || $this->RequestHandler->prefers('json')) {
-            $this->_restIndex();
-            return;
+            return $this->_restIndex();
         }
         
-        // Regular web request
+        // Web request
         $conditions = array();
         
         // Search filter
         if (!empty($this->request->query['search'])) {
             $search = $this->request->query['search'];
             $conditions['OR'] = array(
-                'Policy.title LIKE' => '%' . $search . '%',
+                'Policy.title LIKE'       => '%' . $search . '%',
                 'Policy.description LIKE' => '%' . $search . '%'
             );
         }
@@ -65,13 +64,13 @@ class PoliciesController extends AppController {
         try {
             $this->set('policies', $this->paginate('Policy', $conditions));
             
-            // Get statistics
+            // Stats (used by policies index page; dashboard gets its own stats)
             $stats = array(
-                'total' => $this->Policy->find('count'),
-                'active' => $this->Policy->find('count', array(
+                'total'    => $this->Policy->find('count'),
+                'active'   => $this->Policy->find('count', array(
                     'conditions' => array('Policy.status' => 'active')
                 )),
-                'draft' => $this->Policy->find('count', array(
+                'draft'    => $this->Policy->find('count', array(
                     'conditions' => array('Policy.status' => 'draft')
                 )),
                 'archived' => $this->Policy->find('count', array(
@@ -81,7 +80,12 @@ class PoliciesController extends AppController {
             $this->set('stats', $stats);
             
         } catch (Exception $e) {
-            $this->Session->setFlash('Error loading policies: ' . $e->getMessage(), 'default', array(), 'error');
+            $this->Session->setFlash(
+                'Error loading policies: ' . $e->getMessage(),
+                'default',
+                array(),
+                'error'
+            );
             $this->set('policies', array());
             $this->set('stats', array('total' => 0, 'active' => 0, 'draft' => 0, 'archived' => 0));
         }
@@ -96,10 +100,10 @@ class PoliciesController extends AppController {
         ));
         
         $this->set(array(
-            'success' => true,
-            'data' => $policies,
-            'count' => count($policies),
-            '_serialize' => array('success', 'data', 'count')
+            'success'   => true,
+            'data'      => $policies,
+            'count'     => count($policies),
+            '_serialize'=> array('success', 'data', 'count')
         ));
     }
     
@@ -118,7 +122,7 @@ class PoliciesController extends AppController {
             if ($this->request->is('api')) {
                 $this->set(array(
                     'success' => false,
-                    'error' => 'Policy not found',
+                    'error'   => 'Policy not found',
                     '_serialize' => array('success', 'error')
                 ));
                 $this->response->statusCode(404);
@@ -131,7 +135,7 @@ class PoliciesController extends AppController {
         if ($this->request->is('api')) {
             $this->set(array(
                 'success' => true,
-                'data' => $policy,
+                'data'    => $policy,
                 '_serialize' => array('success', 'data')
             ));
         } else {
@@ -141,7 +145,7 @@ class PoliciesController extends AppController {
     
     /**
      * Add new policy
-     * POST /policies/add or /api/policies
+     * POST /policies/add (HTML + modal) or /api/policies (JSON)
      */
     public function add() {
         $this->set('title_for_layout', 'Add New Policy');
@@ -149,38 +153,47 @@ class PoliciesController extends AppController {
         if ($this->request->is('post')) {
             $this->Policy->create();
             
-            // Get data from request
-            $data = $this->request->is('api') ? 
-                    $this->request->input('json_decode', true) : 
-                    $this->request->data;
+            // API → JSON body, Web → normal form
+            $data = $this->request->is('api')
+                ? $this->request->input('json_decode', true)
+                : $this->request->data;
             
             if ($this->Policy->save($data)) {
-                $id = $this->Policy->getLastInsertID();
+                $id     = $this->Policy->getLastInsertID();
                 $policy = $this->Policy->findById($id);
                 
                 if ($this->request->is('api')) {
                     $this->set(array(
                         'success' => true,
                         'message' => 'Policy created successfully',
-                        'data' => $policy,
+                        'data'    => $policy,
                         '_serialize' => array('success', 'message', 'data')
                     ));
                     $this->response->statusCode(201);
                 } else {
-                    $this->Session->setFlash('Policy has been created successfully', 'default', array(), 'success');
-                    $this->redirect(array('action' => 'index'));
+                    $this->Session->setFlash(
+                        'Policy has been created successfully',
+                        'default',
+                        array('class' => 'success')
+                    );
+                    // Back to admin dashboard (modal use-case)
+                    return $this->redirect(array('controller' => 'users', 'action' => 'dashboard'));
                 }
             } else {
                 if ($this->request->is('api')) {
                     $this->set(array(
                         'success' => false,
-                        'error' => 'Failed to create policy',
+                        'error'   => 'Failed to create policy',
                         'validationErrors' => $this->Policy->validationErrors,
                         '_serialize' => array('success', 'error', 'validationErrors')
                     ));
                     $this->response->statusCode(400);
                 } else {
-                    $this->Session->setFlash('Failed to create policy. Please try again.', 'default', array(), 'error');
+                    $this->Session->setFlash(
+                        'Failed to create policy. Please try again.',
+                        'default',
+                        array('class' => 'error')
+                    );
                 }
             }
         }
@@ -188,7 +201,7 @@ class PoliciesController extends AppController {
     
     /**
      * Edit policy
-     * PUT /policies/edit/:id or /api/policies/:id
+     * POST/PUT /policies/edit/:id (HTML + modal) or /api/policies/:id
      */
     public function edit($id = null) {
         if (!$id) {
@@ -201,7 +214,7 @@ class PoliciesController extends AppController {
             if ($this->request->is('api')) {
                 $this->set(array(
                     'success' => false,
-                    'error' => 'Policy not found',
+                    'error'   => 'Policy not found',
                     '_serialize' => array('success', 'error')
                 ));
                 $this->response->statusCode(404);
@@ -214,10 +227,9 @@ class PoliciesController extends AppController {
         $this->set('title_for_layout', 'Edit Policy');
         
         if ($this->request->is(array('post', 'put'))) {
-            // Get data from request
-            $data = $this->request->is('api') ? 
-                    $this->request->input('json_decode', true) : 
-                    $this->request->data;
+            $data = $this->request->is('api')
+                ? $this->request->input('json_decode', true)
+                : $this->request->data;
             
             $this->Policy->id = $id;
             
@@ -228,24 +240,32 @@ class PoliciesController extends AppController {
                     $this->set(array(
                         'success' => true,
                         'message' => 'Policy updated successfully',
-                        'data' => $updated,
+                        'data'    => $updated,
                         '_serialize' => array('success', 'message', 'data')
                     ));
                 } else {
-                    $this->Session->setFlash('Policy has been updated successfully', 'default', array(), 'success');
-                    $this->redirect(array('action' => 'index'));
+                    $this->Session->setFlash(
+                        'Policy has been updated successfully',
+                        'default',
+                        array('class' => 'success')
+                    );
+                    return $this->redirect(array('controller' => 'users', 'action' => 'dashboard'));
                 }
             } else {
                 if ($this->request->is('api')) {
                     $this->set(array(
                         'success' => false,
-                        'error' => 'Failed to update policy',
+                        'error'   => 'Failed to update policy',
                         'validationErrors' => $this->Policy->validationErrors,
                         '_serialize' => array('success', 'error', 'validationErrors')
                     ));
                     $this->response->statusCode(400);
                 } else {
-                    $this->Session->setFlash('Failed to update policy. Please try again.', 'default', array(), 'error');
+                    $this->Session->setFlash(
+                        'Failed to update policy. Please try again.',
+                        'default',
+                        array('class' => 'error')
+                    );
                 }
             }
         }
@@ -268,7 +288,7 @@ class PoliciesController extends AppController {
             if ($this->request->is('api')) {
                 $this->set(array(
                     'success' => false,
-                    'error' => 'Invalid policy ID',
+                    'error'   => 'Invalid policy ID',
                     '_serialize' => array('success', 'error')
                 ));
                 $this->response->statusCode(400);
@@ -286,23 +306,56 @@ class PoliciesController extends AppController {
                     '_serialize' => array('success', 'message')
                 ));
             } else {
-                $this->Session->setFlash('Policy has been deleted successfully', 'default', array(), 'success');
+                $this->Session->setFlash(
+                    'Policy has been deleted successfully',
+                    'default',
+                    array('class' => 'success')
+                );
             }
         } else {
             if ($this->request->is('api')) {
                 $this->set(array(
                     'success' => false,
-                    'error' => 'Failed to delete policy',
+                    'error'   => 'Failed to delete policy',
                     '_serialize' => array('success', 'error')
                 ));
                 $this->response->statusCode(400);
             } else {
-                $this->Session->setFlash('Failed to delete policy', 'default', array(), 'error');
+                $this->Session->setFlash(
+                    'Failed to delete policy',
+                    'default',
+                    array('class' => 'error')
+                );
             }
         }
         
         if (!$this->request->is('api')) {
-            $this->redirect(array('action' => 'index'));
+            return $this->redirect(array('controller' => 'users', 'action' => 'dashboard'));
         }
+    }
+
+    /**
+     * Toggle active/inactive (status) – for dashboard button
+     */
+    public function toggle_status($id = null) {
+        if (!$id) {
+            throw new NotFoundException(__('Invalid policy'));
+        }
+
+        $policy = $this->Policy->findById($id);
+        if (!$policy) {
+            throw new NotFoundException(__('Policy not found'));
+        }
+
+        $newStatus = ($policy['Policy']['status'] === 'active') ? 'inactive' : 'active';
+
+        $this->Policy->id = $id;
+        if ($this->Policy->saveField('status', $newStatus)) {
+            $this->Session->setFlash('Policy status updated.', 'default', array('class' => 'success'));
+        } else {
+            $this->Session->setFlash('Failed to update policy status.', 'default', array('class' => 'error'));
+        }
+
+        return $this->redirect(array('controller' => 'users', 'action' => 'dashboard'));
     }
 }

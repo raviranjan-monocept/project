@@ -10,34 +10,30 @@
       </footer>
       <!--end::Footer-->
     </div>
-    <!--end::App Wrapper-->
-    <!--begin::Script-->
-    <!--begin::Third Party Plugin(OverlayScrollbars)-->
-   <?php $this->start('script'); ?>
+       <!--begin::Script-->
+
+    <!-- Third Party Plugin(OverlayScrollbars) -->
     <script
       src="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/browser/overlayscrollbars.browser.es6.min.js"
       crossorigin="anonymous"
     ></script>
-     <?php $this->end(); ?>
-    <!--end::Third Party Plugin(OverlayScrollbars)--><!--begin::Required Plugin(popperjs for Bootstrap 5)-->
-    <?php $this->start('script'); ?>
+
+    <!-- Required Plugin(popperjs for Bootstrap 5) -->
     <script
       src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
       crossorigin="anonymous"
     ></script>
-     <?php $this->end(); ?>
-    <!--end::Required Plugin(popperjs for Bootstrap 5)--><!--begin::Required Plugin(Bootstrap 5)-->
-    <?php $this->start('script'); ?>
+
+    <!-- Required Plugin(Bootstrap 5) -->
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.min.js"
       crossorigin="anonymous"
     ></script>
-    <?php $this->end(); ?>
-    <!--end::Required Plugin(Bootstrap 5)--><!--begin::Required Plugin(AdminLTE)-->
-    
-   <?= $this->Html->script('adminlte.min'); ?>  
-    <!--end::Required Plugin(AdminLTE)--><!--begin::OverlayScrollbars Configure-->
-    <?php $this->start('script'); ?>
+
+    <!-- Required Plugin(AdminLTE) -->
+    <?= $this->Html->script('adminlte.min'); ?>
+
+    <!-- OverlayScrollbars Configure -->
     <script>
       const SELECTOR_SIDEBAR_WRAPPER = '.sidebar-wrapper';
       const Default = {
@@ -58,88 +54,41 @@
         }
       });
     </script>
-    <?php $this->end(); ?>
-    <!--end::OverlayScrollbars Configure-->
-    <!-- OPTIONAL SCRIPTS -->
-    <!-- apexcharts -->
-     <?php $this->start('script'); ?>
+
+    <!-- OPTIONAL SCRIPTS: apexcharts -->
     <script
       src="https://cdn.jsdelivr.net/npm/apexcharts@3.37.1/dist/apexcharts.min.js"
       integrity="sha256-+vh8GkaU7C9/wbSLIcwq82tQ2wTf44aOHA8HlBMwRI8="
       crossorigin="anonymous"
     ></script>
-    <?php $this->end(); ?>
-    <?php $this->start('script'); ?>
+
     <script>
-      // NOTICE!! DO NOT USE ANY OF THIS JAVASCRIPT
-      // IT'S ALL JUST JUNK FOR DEMO
-      // ++++++++++++++++++++++++++++++++++++++++++
-
-      /* apexcharts
-       * -------
-       * Here we will create a few charts using apexcharts
-       */
-
-      //-----------------------
-      // - MONTHLY SALES CHART -
-      //-----------------------
-
+      // demo charts (can keep or remove)
       const sales_chart_options = {
         series: [
-          {
-            name: 'Digital Goods',
-            data: [28, 48, 40, 19, 86, 27, 90],
-          },
-          {
-            name: 'Electronics',
-            data: [65, 59, 80, 81, 56, 55, 40],
-          },
+          { name: 'Digital Goods', data: [28, 48, 40, 19, 86, 27, 90] },
+          { name: 'Electronics',  data: [65, 59, 80, 81, 56, 55, 40] },
         ],
-        chart: {
-          height: 180,
-          type: 'area',
-          toolbar: {
-            show: false,
-          },
-        },
-        legend: {
-          show: false,
-        },
+        chart: { height: 180, type: 'area', toolbar: { show: false } },
+        legend: { show: false },
         colors: ['#0d6efd', '#20c997'],
-        dataLabels: {
-          enabled: false,
-        },
-        stroke: {
-          curve: 'smooth',
-        },
+        dataLabels: { enabled: false },
+        stroke: { curve: 'smooth' },
         xaxis: {
           type: 'datetime',
           categories: [
-            '2023-01-01',
-            '2023-02-01',
-            '2023-03-01',
-            '2023-04-01',
-            '2023-05-01',
-            '2023-06-01',
-            '2023-07-01',
+            '2023-01-01','2023-02-01','2023-03-01',
+            '2023-04-01','2023-05-01','2023-06-01','2023-07-01',
           ],
         },
-        tooltip: {
-          x: {
-            format: 'MMMM yyyy',
-          },
-        },
+        tooltip: { x: { format: 'MMMM yyyy' } },
       };
 
       const sales_chart = new ApexCharts(
         document.querySelector('#sales-chart'),
-        sales_chart_options,
+        sales_chart_options
       );
       sales_chart.render();
-
-      //---------------------------
-      // - END MONTHLY SALES CHART -
-      //---------------------------
 
       function createSparklineChart(selector, data) {
         const options = {
@@ -148,34 +97,17 @@
             type: 'line',
             width: 150,
             height: 30,
-            sparkline: {
-              enabled: true,
-            },
+            sparkline: { enabled: true },
           },
           colors: ['var(--bs-primary)'],
-          stroke: {
-            width: 2,
-          },
+          stroke: { width: 2 },
           tooltip: {
-            fixed: {
-              enabled: false,
-            },
-            x: {
-              show: false,
-            },
-            y: {
-              title: {
-                formatter() {
-                  return '';
-                },
-              },
-            },
-            marker: {
-              show: false,
-            },
+            fixed: { enabled: false },
+            x: { show: false },
+            y: { title: { formatter() { return ''; } } },
+            marker: { show: false },
           },
         };
-
         const chart = new ApexCharts(document.querySelector(selector), options);
         chart.render();
       }
@@ -196,31 +128,24 @@
       createSparklineChart('#table-sparkline-6', table_sparkline_6_data);
       createSparklineChart('#table-sparkline-7', table_sparkline_7_data);
 
-      //-------------
-      // - PIE CHART -
-      //-------------
-
       const pie_chart_options = {
         series: [700, 500, 400, 600, 300, 100],
-        chart: {
-          type: 'donut',
-        },
+        chart: { type: 'donut' },
         labels: ['Chrome', 'Edge', 'FireFox', 'Safari', 'Opera', 'IE'],
-        dataLabels: {
-          enabled: false,
-        },
+        dataLabels: { enabled: false },
         colors: ['#0d6efd', '#20c997', '#ffc107', '#d63384', '#6f42c1', '#adb5bd'],
       };
 
-      const pie_chart = new ApexCharts(document.querySelector('#pie-chart'), pie_chart_options);
+      const pie_chart = new ApexCharts(
+        document.querySelector('#pie-chart'),
+        pie_chart_options
+      );
       pie_chart.render();
-
-      //-----------------
-      // - END PIE CHART -
-      //-----------------
     </script>
-    <?php $this->end(); ?>
+
+    <!-- Page-specific scripts from views (like openPolicyModal) -->
+    <?php echo $this->fetch('script'); ?>
+
     <!--end::Script-->
   </body>
-  <!--end::Body-->
 </html>
