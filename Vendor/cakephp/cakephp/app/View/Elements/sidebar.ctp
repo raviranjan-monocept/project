@@ -30,17 +30,26 @@
                     Dashboard
                   </p>
                 </a>
-               
               </li>
+  
 
-            <li class="nav-item">
-                <a href="./generate/theme.html" class="nav-link">
-                  <i class="nav-icon bi bi-palette"></i>
-                  <p>Admin Management</p>
-                </a>
-              </li>
+          <!-- Admin Management -->
+  <li class="nav-item">
+    <?= $this->Html->link(
+      '<i class="nav-icon bi bi-palette"></i><p>Admin Management</p>',
+      ['controller' => 'Admins', 'action' => 'index'],
+      ['escape' => false, 'class' => 'nav-link']
+    ) ?>
+  </li>
 
-
+                     <!-- Policy Management -->
+  <li class="nav-item">
+    <?= $this->Html->link(
+      '<i class="nav-icon bi bi-palette"></i><p>Policy Management</p>',
+      ['controller' => 'Policies', 'action' => 'index'],
+      ['escape' => false, 'class' => 'nav-link']
+    ) ?>
+  </li>
               
               <li class="nav-item">
                 <a href="./generate/theme.html" class="nav-link">
@@ -48,15 +57,7 @@
                   <p>Claims & Approvals</p>
                 </a>
               </li>
-               <li class="nav-item">
-                <a href="#" class="nav-link">
-                  <i class="nav-icon bi bi-box-seam-fill"></i>
-                  <p>
-                    All Policy
-                  </p>
-                </a>
-                
-              </li>
+ 
               <li class="nav-item">
                 <a href="#" class="nav-link">
                   <i class="nav-icon bi bi-box-seam-fill"></i>

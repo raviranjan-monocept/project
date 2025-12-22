@@ -30,30 +30,59 @@ class UsersController extends AppController {
     /**
      * Dashboard action
      */
-    public function dashboard() {
-        if (!$this->Auth->user()) {
-            return $this->redirect(array('action' => 'login'));
-        }
+ public function dashboard() {
 
-        $role = $this->Auth->user('role');
-        $this->set('role', $role);
-        $this->set('user', $this->Auth->user());
-
-        // Load role-specific view
-        switch ($role) {
-            case 'super_user':
-                return $this->_superAdminDashboard();
-            case 'admin':
-                $this->render('dashboard_admin');
-                break;
-            case 'guest':
-                $this->render('dashboard_guest');
-                break;
-            default:
-                $this->render('dashboard_user');
-        }
+    if (!$this->Auth->user()) {
+        return $this->redirect(array('action' => 'login'));
     }
 
+    $role = $this->Auth->user('role');
+    $this->set('role', $role);
+    $this->set('user', $this->Auth->user());
+
+    // For admin + super_user we also show policy stats + short list
+    if (in_array($role, array('admin', 'super_user'))) {
+        $this->loadModel('Policy');
+
+        // Stats for cards
+        $stats = array(
+            'total'    => $this->Policy->find('count'),
+            'active'   => $this->Policy->find('count', array(
+                'conditions' => array('Policy.status' => 'active')
+            )),
+            'draft'    => $this->Policy->find('count', array(
+                'conditions' => array('Policy.status' => 'draft')
+            )),
+            'archived' => $this->Policy->find('count', array(
+                'conditions' => array('Policy.status' => 'archived')
+            )),
+        );
+        $this->set(compact('stats'));   // $stats in dashboard_admin.ctp
+
+        // Latest policies for “Policy List” table on dashboard
+        $policies = $this->Policy->find('all', array(
+            'order' => array('Policy.created' => 'DESC'),
+            'limit' => 5
+        ));
+        $this->set(compact('policies')); // $policies in dashboard_admin.ctp
+    }
+
+    // Load role-specific view
+    switch ($role) {
+        case 'super_user':
+            return $this->_superAdminDashboard();
+        case 'admin':
+            $this->render('dashboard_admin');
+            break;
+        case 'guest':
+            $this->render('dashboard_guest');
+            break;
+        default:
+            $this->render('dashboard_user');
+    }
+}
+
+    
     /**
      * Super Admin Dashboard
      */
