@@ -96,89 +96,101 @@
            
             <!--end::Row-->
             <!--begin::Row-->
-        <h3 class="d-flex justify-content-between align-items-center">
-    <span>Policy List</span>
-    <button type="button"
-            class="btn btn-sm btn-primary"
-            data-toggle="modal"
-            data-target="#policyModal"
-            onclick="openPolicyModal();">
-        + Add New Policy
-    </button>
-</h3>
+          <div class="row">
+            <div class="col-12">
+              <div class="card">
+                <div class="card-header">
+                  <h3 class="card-title">Policy List</h3>
+                  <div class="card-tools">
+                    <?php echo $this->Html->link(
+                      '<i class="fas fa-plus"></i> Add Policy',
+                      array('controller' => 'policies', 'action' => 'add'),
+                      array('class' => 'btn btn-primary btn-sm', 'escape' => false)
+                    ); ?>
+                  </div>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body table-responsive p-0">
+                  <table class="table table-hover text-nowrap">
+                    <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Title</th>
+                      <th>Description</th>
+                      <th>Status</th>
+                      <th class="text-center">Active</th>
+                      <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <?php if (!empty($policies) && is_array($policies)): ?>
+                      <?php foreach ($policies as $policy): ?>
+                        <tr>
+                          <td><?php echo h($policy['Policy']['id']); ?></td>
+                          <td><?php echo h($policy['Policy']['title']); ?></td>
+                          <td><?php echo h($policy['Policy']['description']); ?></td>
+                          <td><?php echo h($policy['Policy']['status']); ?></td>
+                          <td class="text-center">
+                            <?php
+                            $isActive = ($policy['Policy']['status'] === 'active');
+                            echo $this->Html->link(
+                              $isActive ? 'Active' : 'Inactive',
+                              array('controller' => 'policies', 'action' => 'toggle_status', $policy['Policy']['id']),
+                              array('class' => 'btn btn-sm ' . ($isActive ? 'btn-success' : 'btn-secondary'))
+                            );
+                            ?>
+                          </td>
+                          <td>
+                            <div class="btn-group" role="group" aria-label="policy-actions">
+                              <?php echo $this->Html->link(
+                                '<i class="bi bi-eye"></i>',
+                                array('controller' => 'policies', 'action' => 'view', $policy['Policy']['id']),
+                                array('class' => 'btn btn-outline-primary btn-sm', 'escape' => false, 'title' => 'View')
+                              ); ?>
 
+                              <?php echo $this->Html->link(
+                                '<i class="bi bi-pencil"></i>',
+                                array('controller' => 'policies', 'action' => 'edit', $policy['Policy']['id']),
+                                array('class' => 'btn btn-outline-warning btn-sm', 'escape' => false, 'title' => 'Edit')
+                              ); ?>
 
-<?php if (!empty($policies) && is_array($policies)): ?>
-    <table class="table table-striped table-hover">
-        <thead>
-        <tr>
-            <th>id</th>
-            <th>title</th>
-            <th>Description</th>
-            <th>Status</th>
-            <th class="text-center">Active</th>
-            <th class="text-end">Actions</th>
-        </tr>
-        </thead>
-        <tbody>
-        <?php foreach ($policies as $policy): ?>
-            <tr>
-                <td><?php echo h($policy['Policy']['id']); ?></td>
-                <td><?php echo h($policy['Policy']['title']); ?></td>
-                 <td><?php echo h($policy['Policy']['description']); ?></td>
-                <td><?php echo h($policy['Policy']['status']); ?></td>
-               
+                              <?php echo $this->Form->postLink(
+                                '<i class="bi bi-trash"></i>',
+                                array('controller' => 'policies', 'action' => 'delete', $policy['Policy']['id']),
+                                array('class' => 'btn btn-outline-danger btn-sm', 'escape' => false, 'title' => 'Delete'),
+                                'Are you sure you want to delete this policy?'
+                              ); ?>
 
-                <!-- Toggle active/deactive (example uses status = active/inactive) -->
-                <td class="text-center">
-                    <?php
-                    $isActive = ($policy['Policy']['status'] === 'active');
-                    echo $this->Html->link(
-                        $isActive ? 'Active' : 'Inactive',
-                        array(
-                            'controller' => 'policies',
-                            'action' => 'toggle_status',   // create this in PoliciesController
-                            $policy['Policy']['id']
-                        ),
-                        array(
-                            'class' => 'btn btn-xs ' . ($isActive ? 'btn-success' : 'btn-secondary')
-                        )
-                    );
-                    ?>
-                </td>
-
-                <!-- Action buttons -->
-                <td class="text-end">
-                    <?php
-                    echo $this->Html->link(
-                        'View',
-                        array('controller' => 'policies', 'action' => 'view', $policy['Policy']['id']),
-                        array('class' => 'btn btn-xs btn-info')
-                    );
-
-                    echo ' ' . $this->Html->link(
-                        'Edit',
-                        array('controller' => 'policies', 'action' => 'edit', $policy['Policy']['id']),
-                        array('class' => 'btn btn-xs btn-warning')
-                    );
-
-                    echo ' ' . $this->Form->postLink(
-                        'Delete',
-                        array('controller' => 'policies', 'action' => 'delete', $policy['Policy']['id']),
-                        array(
-                            'class' => 'btn btn-xs btn-danger',
-                            'confirm' => 'Are you sure you want to delete this policy?'
-                        )
-                    );
-                    ?>
-                </td>
-            </tr>
-        <?php endforeach; ?>
-        </tbody>
-    </table>
-<?php else: ?>
-    <p>No policies found.</p>
-<?php endif; ?>
+                              <?php if ($policy['Policy']['status'] === 'active'): ?>
+                                <?php echo $this->Form->postLink(
+                                '<i class="bi bi-toggle-on"></i>',
+                                array('controller' => 'policies', 'action' => 'toggle_status', $policy['Policy']['id']),
+                                array('class' => 'btn btn-outline-danger btn-sm', 'escape' => false, 'title' => 'Deactivate'),
+                                'Are you sure you want to deactivate this policy?'
+                                ); ?>
+                              <?php else: ?>
+                                <?php echo $this->Form->postLink(
+                                '<i class="bi bi-toggle-off"></i>',
+                                array('controller' => 'policies', 'action' => 'toggle_status', $policy['Policy']['id']),
+                                array('class' => 'btn btn-outline-success btn-sm', 'escape' => false, 'title' => 'Activate'),
+                                'Are you sure you want to activate this policy?'
+                                ); ?>
+                              <?php endif; ?>
+                            </div>
+                          </td>
+                        </tr>
+                      <?php endforeach; ?>
+                    <?php else: ?>
+                      <tr>
+                        <td colspan="6" class="text-center">No policies found.</td>
+                      </tr>
+                    <?php endif; ?>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
 
 
             <!--end::Row-->
