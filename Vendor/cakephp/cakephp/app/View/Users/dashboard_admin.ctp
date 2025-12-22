@@ -98,13 +98,15 @@
             <!--begin::Row-->
         <h3 class="d-flex justify-content-between align-items-center">
     <span>Policy List</span>
-    <a href="<?php echo $this->Html->url(array(
-        'controller' => 'policies',
-        'action' => 'add'
-    )); ?>" class="btn btn-sm btn-primary">
+    <button type="button"
+            class="btn btn-sm btn-primary"
+            data-toggle="modal"
+            data-target="#policyModal"
+            onclick="openPolicyModal();">
         + Add New Policy
-    </a>
+    </button>
 </h3>
+
 
 <?php if (!empty($policies) && is_array($policies)): ?>
     <table class="table table-striped table-hover">
@@ -183,6 +185,141 @@
           </div>
           <!--end::Container-->
         </div>
+        <!-- Add/Edit Policy Modal -->
+<div class="modal fade" id="policyModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="policyModalTitle">Add Policy</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span>&times;</span>
+        </button>
+      </div>
+
+      <?php
+      echo $this->Form->create('Policy', array(
+          'id' => 'policyForm',
+          'url' => array('controller' => 'policies', 'action' => 'add')  // default, changed in JS for edit
+      ));
+      ?>
+
+      <div class="modal-body">
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <?php echo $this->Form->input('policy_no', array(
+                'label' => 'Policy Number',
+                'class' => 'form-control'
+            )); ?>
+          </div>
+          <div class="form-group col-md-6">
+            <?php echo $this->Form->input('customer_name', array(
+                'label' => 'Customer Name',
+                'class' => 'form-control'
+            )); ?>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <?php echo $this->Form->input('sum_insured', array(
+                'label' => 'Sum Insured',
+                'class' => 'form-control'
+            )); ?>
+          </div>
+          <div class="form-group col-md-6">
+            <?php echo $this->Form->input('premium_amount', array(
+                'label' => 'Premium Amount',
+                'class' => 'form-control'
+            )); ?>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group col-md-4">
+            <?php echo $this->Form->input('status', array(
+                'label' => 'Status',
+                'class' => 'form-control',
+                'type'  => 'select',
+                'options' => array(
+                    'draft' => 'Draft',
+                    'active' => 'Active',
+                    'archived' => 'Archived'
+                )
+            )); ?>
+          </div>
+          <div class="form-group col-md-4">
+            <?php echo $this->Form->input('start_date', array(
+                'label' => 'Start Date',
+                'class' => 'form-control',
+                'type'  => 'date'
+            )); ?>
+          </div>
+          <div class="form-group col-md-4">
+            <?php echo $this->Form->input('end_date', array(
+                'label' => 'End Date',
+                'class' => 'form-control',
+                'type'  => 'date'
+            )); ?>
+          </div>
+        </div>
+
+        <?php echo $this->Form->hidden('id', array('id' => 'policyIdField')); ?>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        <?php echo $this->Form->button('Save', array('class' => 'btn btn-primary')); ?>
+      </div>
+
+      <?php echo $this->Form->end(); ?>
+    </div>
+  </div>
+</div>
+
         <!--end::App Content-->
       </main>
+      <?php $this->start('script');?>
+      <script>
+function openPolicyModal(
+    id,
+    policyNo,
+    customerName,
+    sumInsured,
+    premiumAmount,
+    status,
+    startDate,
+    endDate
+) {
+    var isEdit = !!id;
+
+    // Set title
+    document.getElementById('policyModalTitle').innerText =
+        isEdit ? 'Edit Policy' : 'Add Policy';
+
+    // Set form action (add or edit)
+    var form = document.getElementById('policyForm');
+    if (isEdit) {
+        form.action = '<?php echo $this->Html->url(array(
+            "controller" => "policies",
+            "action" => "edit"
+        )); ?>/' + id;
+    } else {
+        form.action = '<?php echo $this->Html->url(array(
+            "controller" => "policies",
+            "action" => "add"
+        )); ?>';
+    }
+
+    // Fill fields
+    document.getElementById('policyIdField').value     = id || '';
+    document.getElementById('PolicyPolicyNo').value    = policyNo || '';
+    document.getElementById('PolicyCustomerName').value= customerName || '';
+    document.getElementById('PolicySumInsured').value  = sumInsured || '';
+    document.getElementById('PolicyPremiumAmount').value = premiumAmount || '';
+    document.getElementById('PolicyStatus').value      = status || 'draft';
+    document.getElementById('PolicyStartDate').value   = startDate || '';
+    document.getElementById('PolicyEndDate').value     = endDate || '';
+}
+</script>
+<?php $this->end();?>
  <?php echo $this->element('footer');?>
