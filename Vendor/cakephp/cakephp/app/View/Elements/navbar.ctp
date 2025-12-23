@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
   <!--begin::Head-->
-  <head>
+ 
     <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,8 +10,19 @@
     <?php echo $this->Html->css('https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css'); ?>
     
     <?php echo $this->Html->css('https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/styles/overlayscrollbars.min.css'); ?>
+ <?php
+    // Read logged-in user from Auth session
+    $authUser = $this->Session->read('Auth.User');
 
-</head>
+    // Avatar image: DB stores e.g. 'users/user_1_...jpg' or null
+    $avatarPath = !empty($authUser['image'])
+        ? $authUser['image']
+        : 'user2-160x160.jpg'; // default avatar in webroot/img/
+
+    $displayName = !empty($authUser['full_name']) ? $authUser['full_name'] : 'User';
+    $displayRole = !empty($authUser['role']) ? $authUser['role'] : '';
+    ?>
+
   </head>
   <body class="layout-fixed sidebar-expand-lg sidebar-open bg-body-tertiary">
     <!--begin::App Wrapper-->
@@ -168,13 +179,14 @@
             <!--begin::User Menu Dropdown-->
             <li class="nav-item dropdown user-menu">
               <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
-                <?php
-                     echo $this->Html->image('user2-160x160.jpg',
-                     array(
-                    'class' => 'user-image rounded-circle shadow',
-                    'alt'   => 'Care Health Insurance'
-                      )
-                    ); 
+              <?php
+                echo $this->Html->image(
+                    $avatarPath,
+                    array(
+                        'class' => 'user-image rounded-circle shadow',
+                        'alt'   => 'Care Health Insurance'
+                    )
+                );
                 ?>
 
                 <span class="d-none d-md-inline">Welcome, <?php echo h($user['full_name']); ?></span>
@@ -183,13 +195,14 @@
                 <!--begin::User Image-->
                 <li class="user-header text-bg-primary">
                  <?php
-                     echo $this->Html->image('user2-160x160.jpg',
-                     array(
-                    'class' => 'rounded-circle shadow user-avatar',
-                    'alt'   => 'Care Health Insurance'
+                  echo $this->Html->image(
+                      $avatarPath,
+                      array(
+                          'class' => 'rounded-circle shadow user-avatar',
+                          'alt'   => 'Care Health Insurance'
                       )
-                    ); 
-                ?>
+                  );
+                  ?>
 
                   <p>
                     <span>Welcome, <?php echo h($user['full_name']); ?> (<?php echo h($user['role']); ?>)</span>

@@ -9,53 +9,79 @@
       <!--end::Header-->
       <!--begin::Sidebar-->
       <?php echo $this->element('sidebar'); ?>
-
-<div class="app-content">
-    <div class="container-fluid">
-    <div class="row">
-        <div class="col-md-12">
-            <!-- Page Header -->
-            <div class="page-header">
-                <h1>
-                    <i class="fa fa-file-text-o"></i> Policy Details
-                </h1>
-                <div class="actions">
-                    <?php echo $this->Html->link(
-                        '<i class="fa fa-edit"></i> Edit',
-                        array('action' => 'edit', $policy['Policy']['id']),
-                        array('class' => 'btn btn-warning', 'escape' => false)
-                    ); ?>
-                    <?php echo $this->Form->postLink(
-                        '<i class="fa fa-trash"></i> Delete',
-                        array('action' => 'delete', $policy['Policy']['id']),
-                        array('class' => 'btn btn-danger', 'escape' => false),
-                        __('Are you sure you want to delete this policy?')
-                    ); ?>
-                    <?php echo $this->Html->link(
-                        '<i class="fa fa-arrow-left"></i> Back to List',
-                        array('action' => 'index'),
-                        array('class' => 'btn btn-default', 'escape' => false)
-                    ); ?>
-                </div>
+      <!--begin::App Main-->
+      <main class="app-main">
+        <!--begin::App Content Header-->
+        <div class="app-content-header">
+          <!--begin::Container-->
+          <div class="container-fluid">
+            <!--begin::Row-->
+            <div class="row">
+              <div class="col-sm-6"><h3 class="mb-0">Policy Details</h3></div>
+              <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-end">
+                  <li class="breadcrumb-item"><a href="#">Home</a></li>
+                  <li class="breadcrumb-item active" aria-current="page">Single policy detail</li>
+                </ol>
+              </div>
             </div>
+            <!--end::Row-->
+          </div>
+          <!--end::Container-->
+        </div>
+        <!--end::App Content Header-->
+        <!--begin::App Content-->
+        <div class="app-content">
+          <!--begin::Container-->
+          <div class="container-fluid">
+            <!--begin::Row-->
+            <div class="row g-4">
+              <!--begin::Col-->
+              <div class="col-12">
+                
+              </div>
+              <div class="col-md-12">
+                                <div class="card card-primary card-outline mb-4">
+                                    <div class="card-header d-flex align-items-center">
+                                        <div class="card-title">Policy Name:- <?php echo h($policy['Policy']['title']); ?> </div>
+                                        <div class="ms-auto">
+                                            <div class="actions">
+                                               <?php echo $this->Html->link(
+                                           '<i class="fa fa-edit"></i> Edit',
+                                              array('action' => 'edit', $policy['Policy']['id']),
+                                           array('class' => 'btn btn-warning', 'escape' => false)
+                                            ); ?>
+                                           <?php echo $this->Form->postLink(
+                                          '<i class="fa fa-trash"></i> Delete',
+                                         array('action' => 'delete', $policy['Policy']['id']),
+                                         array('class' => 'btn btn-danger', 'escape' => false),
+                                         __('Are you sure you want to delete this policy?')
+                                        ); ?>
+                                        <?php echo $this->Html->link(
+                                        '<i class="fa fa-arrow-left"></i> Back to List',
+                                        array('action' => 'index'),
+                                        array('class' => 'btn btn-default', 'escape' => false)
+                                        ); ?>
+                                       </div>
+                                        </div>
 
-            <!-- Policy Information Card -->
-            <div class="panel panel-info">
-                <div class="panel-heading">
-                    <h3 class="panel-title">
-                        <i class="fa fa-info-circle"></i> Policy Information
-                        <span class="pull-right">
-                            Policy Number: <?php echo h($policy['Policy']['id']); ?>
-                        </span>
-                    </h3>
-                </div>
-                <div class="panel-body">
+
+                                    </div>
+
+                                    <div class="card-body">
+                                       <div class="panel-body">
                     <div class="policy-content">
                         <!-- Title -->
                         <div class="info-row">
                             <label><i class="fa fa-tag"></i> Title:</label>
                             <div class="info-value">
                                 <h2><?php echo h($policy['Policy']['title']); ?></h2>
+                            </div>
+                        </div>
+                         <div class="info-row">
+                            <label><i class="fa fa-tag"></i> Policy Number:</label>
+                            <div class="info-value">
+                                <h2><?php echo h($policy['Policy']['policy_no']); ?></h2>
                             </div>
                         </div>
 
@@ -87,9 +113,38 @@
                                         <?php echo strtoupper(h($policy['Policy']['status'])); ?>
                                     </span>
                                 </h3>
+                                
                             </div>
                         </div>
-
+   <!-- Timestamps -->
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="info-row">
+                                    <label><i class="fa fa-calendar-plus-o"></i> sum insured</label>
+                                    <div class="info-value">
+                                        <span class="date-time">
+                                             <?php echo nl2br(h($policy['Policy']['sum_insured'])); ?>
+                                        </span>
+                                
+                                       
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <?php if (!empty($policy['Policy']['modified'])): ?>
+                                <div class="col-md-6">
+                                    <div class="info-row">
+                                        <label><i class="fa fa-calendar-check-o"></i>Premium Amount</label>
+                                        <div class="info-value">
+                                            <span class="date-time">
+                                              <?php echo nl2br(h($policy['Policy']['premium_amount'])); ?>
+                                            </span>
+                                           
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php endif; ?>
+                        </div>
                         <!-- Description -->
                         <div class="info-row">
                             <label><i class="fa fa-align-left"></i> Description:</label>
@@ -138,50 +193,19 @@
                 </div>
             </div>
 
-            <!-- Quick Actions Card -->
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title">
-                        <i class="fa fa-bolt"></i> Quick Actions
-                    </h3>
-                </div>
-                <div class="panel-body text-center">
-                    <div class="btn-group btn-group-lg">
-                        <?php echo $this->Html->link(
-                            '<i class="fa fa-edit"></i> Edit Policy',
-                            array('action' => 'edit', $policy['Policy']['id']),
-                            array('class' => 'btn btn-warning', 'escape' => false)
-                        ); ?>
-                        
-                        <?php echo $this->Html->link(
-                            '<i class="fa fa-copy"></i> Duplicate',
-                            array('action' => 'add'),
-                            array('class' => 'btn btn-info', 'escape' => false)
-                        ); ?>
-                        
-                        <?php echo $this->Html->link(
-                            '<i class="fa fa-print"></i> Print',
-                            '#',
-                            array(
-                                'class' => 'btn btn-default',
-                                'escape' => false,
-                                'onclick' => 'window.print(); return false;'
-                            )
-                        ); ?>
-                        
-                        <?php echo $this->Form->postLink(
-                            '<i class="fa fa-trash"></i> Delete',
-                            array('action' => 'delete', $policy['Policy']['id']),
-                            array('class' => 'btn btn-danger', 'escape' => false),
-                            __('Are you sure you want to delete this policy?')
-                        ); ?>
-                    </div>
-                </div>
+                                    </div>
+               
+              </div>
+
+             
             </div>
+
+          </div>
+
         </div>
-    </div>
-</div>
-</div>
+        <!--end::App Content-->
+      </main>
+      <!--end::App Main-->
 
 <style>
 .policies-view {

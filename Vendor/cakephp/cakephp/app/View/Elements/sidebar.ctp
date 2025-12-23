@@ -86,6 +86,13 @@
                   <p>FAQ / Help Center</p>
                 </a>
               </li>
+            <li class="nav-item">
+    <?= $this->Html->link(
+      '<i class="nav-icon bi bi-palette"></i><p>Profile Setting</p>',
+      ['controller' => 'users', 'action' => 'profile'],
+      ['escape' => false, 'class' => 'nav-link']
+    ) ?>
+  </li>
             
              
              
