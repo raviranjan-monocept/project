@@ -180,43 +180,29 @@
             <li class="nav-item dropdown user-menu">
               <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
               <?php
- 
-                            $imgPath = !empty($user['User']['image'])
-                                ? $user['User']['image']
-                                : 'default-user.jpg'; // put a default image in webroot/img/
-
-                            echo $this->Html->image(
-                                $imgPath,
-                                array(
-                                  'class' => 'user-image rounded-circle shadow',
-                                   'alt'   => 'Care Health Insurance',
-                                   
-                                )
-                            );
-                            ?>
-              
-
-              
+                echo $this->Html->image(
+                    $avatarPath,
+                    array(
+                        'class' => 'user-image rounded-circle shadow',
+                        'alt'   => 'Care Health Insurance'
+                    )
+                );
+                ?>
 
                 <span class="d-none d-md-inline">Welcome, <?php echo h($user['full_name']); ?></span>
               </a>
               <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
                 <!--begin::User Image-->
                 <li class="user-header text-bg-primary">
-                  <?php
-                            $imgPath = !empty($user['User']['image'])
-                                ? $user['User']['image']
-                                : 'default-user.jpg'; // put a default image in webroot/img/
-
-                            echo $this->Html->image(
-                                $imgPath,
-                                array(
-                                   'class' => 'rounded-circle shadow user-avatar',
-                                   'alt'   => 'Care Health Insurance',
-                                    'style' => 'width:120px;height:120px;object-fit:cover;'
-                                )
-                            );
-                            ?>
+                 <?php
+                  echo $this->Html->image(
+                      $avatarPath,
+                      array(
+                          'class' => 'rounded-circle shadow user-avatar',
+                          'alt'   => 'Care Health Insurance'
+                      )
+                  );
+                  ?>
 
                   <p>
                     <span>Welcome, <?php echo h($user['full_name']); ?> (<?php echo h($user['role']); ?>)</span>
