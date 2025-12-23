@@ -30,7 +30,7 @@ if (!isset($user) || !isset($user['User'])) {
                             <?php
                             $imgPath = !empty($user['User']['image'])
                                 ? $user['User']['image']
-                                : 'default-user.png'; // put a default image in webroot/img/
+                                : 'default-user.jpg'; // put a default image in webroot/img/
 
                             echo $this->Html->image(
                                 $imgPath,
