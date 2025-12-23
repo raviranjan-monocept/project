@@ -78,13 +78,16 @@
                     <div class="card">
                         <div class="card-header d-flex justify-content-between align-items-center">
                             <h3 class="card-title mb-0">Policy List</h3>
-                            <button type="button"
-                                class="btn btn-primary btn-sm"
-                                data-bs-toggle="modal"
-                                data-bs-target="#policyModal"
-                                 onclick="openPolicyModal();">
-                                 <i class="fas fa-plus"></i> Add Policy
-                            </button>
+                            <div class="card-tools ms-auto">
+                                <button type="button"
+                                    class="btn btn-primary btn-sm ms-auto"
+                                    style="margin-left: auto;"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#policyModal"
+                                    onclick="openPolicyModal();">
+                                    <i class="fas fa-plus"></i> Add Policy
+                                </button>
+                            </div>
 
                         </div>
 

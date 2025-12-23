@@ -192,7 +192,7 @@
                 ?>
 
                   <p>
-                    <span>Welcome, <?php echo h($user['full_name']); ?> (Super User)</span>
+                    <span>Welcome, <?php echo h($user['full_name']); ?> (<?php echo h($user['role']); ?>)</span>
                     <small>Member since Nov. 2023</small>
                   </p>
                 </li>
