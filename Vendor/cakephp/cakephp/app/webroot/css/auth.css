@@ -315,6 +315,10 @@ body {
     flex: 1;
     text-align: right;
 }
+
+.new-css{
+    display:none; 
+}
 .form-right-forgot {
     flex: 1;
     text-align: right;
