@@ -7,7 +7,9 @@
     <div class="header-content">
         <!-- Logo -->
         <div class="header-logo">
-            <?php if ($this->request->params['action'] === 'signup') {
+            <?php 
+            // ✅ FIXED: Changed 'signup' to 'register'
+            if ($this->request->params['action'] === 'register') {
                 echo $this->Html->link(
                     $this->Html->image('careLogo.png', array('alt' => 'Care Health Insurance', 'class' => 'logo-img')),
                     array('action' => 'login'),
@@ -27,15 +29,15 @@
                 <div class="role-selector">
                     <span class="login-as-label">Login As:</span>
                     <div class="dropdown">
-                            <?php
-                            $initialRole = isset($selectedRole) ? $selectedRole : 'user';
-                            $initialRoleDisplay = strtoupper(str_replace('_', ' ', $initialRole));
-                            ?>
-                            <button class="dropdown-toggle" id="roleDropdown" type="button">
-                                <span class="user-icon">👤</span>
-                                <span class="role-text" id="selectedRole"><?php echo h($initialRoleDisplay); ?></span>
-                                <span class="dropdown-arrow">▾</span>
-                            </button>
+                        <?php
+                        $initialRole = isset($selectedRole) ? $selectedRole : 'user';
+                        $initialRoleDisplay = strtoupper(str_replace('_', ' ', $initialRole));
+                        ?>
+                        <button class="dropdown-toggle" id="roleDropdown" type="button">
+                            <span class="user-icon">👤</span>
+                            <span class="role-text" id="selectedRole"><?php echo h($initialRoleDisplay); ?></span>
+                            <span class="dropdown-arrow">▾</span>
+                        </button>
                         <div class="dropdown-menu" id="roleDropdownMenu">
                             <a href="#" class="dropdown-item" data-role="user">USER</a>
                             <a href="#" class="dropdown-item" data-role="admin">ADMIN</a>
@@ -45,10 +47,15 @@
                 </div>
                 
                 <!-- Sign Up button on login page -->
-                <?php echo $this->Html->link('Sign Up', array('action' => 'signup'), array('class' => 'btn btn-signup')); ?>
+                <?php 
+                // ✅ FIXED: Changed 'signup' to 'register'
+                echo $this->Html->link('Sign Up', array('action' => 'register'), array('class' => 'btn btn-signup')); 
+                ?>
                 
-            <?php elseif ($currentAction === 'signup'): ?>
-                <!-- Only Back to Login button on signup page (no dropdown) -->
+            <?php 
+            // ✅ FIXED: Changed 'signup' to 'register'
+            elseif ($currentAction === 'register'): ?>
+                <!-- Only Back to Login button on register page (no dropdown) -->
                 <?php echo $this->Html->link('Back to Login', array('action' => 'login'), array('class' => 'btn btn-signup')); ?>
                 
             <?php else: ?>
@@ -68,7 +75,10 @@
                         </div>
                     </div>
                 </div>
-                <?php echo $this->Html->link('Sign Up', array('action' => 'signup'), array('class' => 'btn btn-signup')); ?>
+                <?php 
+                // ✅ FIXED: Changed 'signup' to 'register'
+                echo $this->Html->link('Register', array('controller' => 'users', 'action' => 'register'), array('class' => 'btn btn-signup')); 
+                ?>
             <?php endif; ?>
         </div>
     </div>

@@ -1,271 +1,329 @@
 <?php
-/**
- * Policies Controller
- *
- * File: app/Controller/PoliciesController.php
- */
 App::uses('AppController', 'Controller');
 
 class PoliciesController extends AppController {
     
     public $name = 'Policies';
     public $uses = array('Policy');
-    public $components = array('RequestHandler', 'Session');
-    public $helpers = array('Html', 'Form', 'Session');
+    public $components = array('RequestHandler');
     
-    /**
-     * Before Filter
-     */
     public function beforeFilter() {
         parent::beforeFilter();
         
-        // Enable REST API
-        if ($this->request->is('api')) {
-            $this->Auth->allow();
-            $this->Security->csrfCheck = false;
-        }
+        $this->Auth->allow('index', 'view', 'add', 'edit', 'delete', 'toggle_status', 'getCategories');
         
-        // Set pagination
-        $this->paginate = array(
-            'limit' => 10,
-            'order' => array('Policy.created' => 'DESC')
-        );
+        // Only disable CSRF and auto-render for API requests
+        if ($this->_isApiRequest()) {
+            if (isset($this->Security)) {
+                $this->Security->csrfCheck = false;
+                $this->Security->validatePost = false;
+            }
+        }
     }
     
     /**
-     * Index - Display all policies
-     * GET /policies or /api/policies
+     * Check if this is an API request
      */
-    public function index() {
-        $this->set('title_for_layout', 'All Policies');
-        
-        // API request → JSON list
-        if ($this->request->is('api') || $this->RequestHandler->prefers('json')) {
-            return $this->_restIndex();
+    private function _isApiRequest() {
+        // Treat as API request only when the URL starts with `api/`, the
+        // request is an AJAX call, or the URL explicitly has a `.json`
+        // extension. Avoid relying solely on Accept headers (which some
+        // browsers/extensions set) to prevent returning raw JSON for
+        // normal browser navigations.
+        $hasJsonExt = (isset($this->request->params['_ext']) && $this->request->params['_ext'] === 'json');
+        return (
+            strpos($this->request->url, 'api/') === 0 ||
+            $this->request->is('ajax') ||
+            $hasJsonExt
+        );
+    }
+    
+    private function _sendResponse($data, $statusCode = 200) {
+        $this->autoRender = false;
+        $this->response->statusCode($statusCode);
+        $this->response->type('application/json');
+        $this->response->body(json_encode($data));
+        return $this->response;
+    }
+    
+    private function _getRequestData() {
+        $data = $this->request->input('json_decode', true);
+        if (empty($data)) {
+            $data = $this->request->data;
         }
+        return $data;
+    }
+    
+    /**
+     * Get categories for dropdown
+     */
+    private function _getCategories() {
+        // Try to load Category model if it exists
+        App::uses('Category', 'Model');
         
-        // Web request
-        $conditions = array();
-        
-        // Search filter
-        if (!empty($this->request->query['search'])) {
-            $search = $this->request->query['search'];
-            $conditions['OR'] = array(
-                'Policy.title LIKE'       => '%' . $search . '%',
-                'Policy.description LIKE' => '%' . $search . '%'
+        if (class_exists('Category')) {
+            try {
+                $Category = new Category();
+                $categories = $Category->find('all', array(
+                    'fields' => array('id', 'name', 'active'),
+                    'conditions' => array('active' => 1),
+                    'order' => array('name' => 'ASC')
+                ));
+
+                $categoryList = array();
+                foreach ($categories as $cat) {
+                    $categoryList[$cat['Category']['id']] = $cat['Category']['name'];
+                }
+                return $categoryList;
+            } catch (Exception $e) {
+                // Table may be missing; fall back to distinct values from policies.categories
+            }
+        }
+
+        // Fallback: derive distinct category names from policies table (useful before migration)
+        try {
+            $results = $this->Policy->find('all', array(
+                'fields' => array('DISTINCT Policy.categories'),
+                'conditions' => array('Policy.categories !=' => '', 'Policy.categories !=' => null)
+            ));
+            $list = array();
+            foreach ($results as $r) {
+                $name = $r['Policy']['categories'];
+                if ($name) {
+                    $list[$name] = $name;
+                }
+            }
+            return $list;
+        } catch (Exception $e) {
+            // Last resort: return sample list
+            return array(
+                1 => 'Health Insurance',
+                2 => 'Life Insurance',
+                3 => 'Motor Insurance',
+                4 => 'Travel Insurance',
+                5 => 'Home Insurance'
             );
         }
+    }
+    
+    /**
+     * API endpoint to get categories
+     */
+    public function getCategories() {
+        $categories = $this->_getCategories();
         
-        // Status filter
-        if (!empty($this->request->query['status'])) {
-            $conditions['Policy.status'] = $this->request->query['status'];
+        if ($this->_isApiRequest()) {
+            return $this->_sendResponse(array(
+                'success' => true,
+                'data' => $categories
+            ), 200);
         }
         
+        $this->set('categories', $categories);
+    }
+    
+    /**
+     * Index - List all policies
+     * WEB: /policies (renders index.ctp)
+     * API: /api/policies (returns JSON)
+     */
+    public function index() {
         try {
-            $this->set('policies', $this->paginate('Policy', $conditions));
+            $conditions = array();
             
-            // Stats (used by policies index page; dashboard gets its own stats)
+            // Search filter
+            if (!empty($this->request->query['search'])) {
+                $search = $this->request->query['search'];
+                $conditions['OR'] = array(
+                    'Policy.title LIKE' => '%' . $search . '%',
+                    'Policy.description LIKE' => '%' . $search . '%'
+                );
+            }
+            
+            // Status filter
+            if (!empty($this->request->query['status'])) {
+                $conditions['Policy.status'] = $this->request->query['status'];
+            }
+            
+            // Ensure associated Category data is fetched (belongsTo)
+            $policies = $this->Policy->find('all', array(
+                'conditions' => $conditions,
+                'order' => array('Policy.created' => 'DESC'),
+                'recursive' => 0
+            ));
+            
+            // Statistics
             $stats = array(
-                'total'    => $this->Policy->find('count'),
-                'active'   => $this->Policy->find('count', array(
+                'total' => $this->Policy->find('count'),
+                'active' => $this->Policy->find('count', array(
                     'conditions' => array('Policy.status' => 'active')
                 )),
-                'draft'    => $this->Policy->find('count', array(
+                'draft' => $this->Policy->find('count', array(
                     'conditions' => array('Policy.status' => 'draft')
                 )),
                 'archived' => $this->Policy->find('count', array(
                     'conditions' => array('Policy.status' => 'archived')
                 ))
             );
+            
+            // API Request - Return JSON
+            if ($this->_isApiRequest()) {
+                return $this->_sendResponse(array(
+                    'success' => true,
+                    'data' => $policies,
+                    'stats' => $stats,
+                    'count' => count($policies)
+                ), 200);
+            }
+            
+            // WEB Request - Render view
+            // Provide category list for the view (used to map ids to names)
+            $categories = $this->_getCategories();
+            $this->set('categories', $categories);
+            $this->set('policies', $policies);
             $this->set('stats', $stats);
+            $this->set('title_for_layout', 'All Policies');
             
         } catch (Exception $e) {
-            $this->Session->setFlash(
-                'Error loading policies: ' . $e->getMessage(),
-                'default',
-                array(),
-                'error'
-            );
+            if ($this->_isApiRequest()) {
+                return $this->_sendResponse(array(
+                    'success' => false,
+                    'message' => 'Error: ' . $e->getMessage()
+                ), 500);
+            }
+            
+            $this->Session->setFlash('Error loading policies', 'default', array('class' => 'error'));
             $this->set('policies', array());
             $this->set('stats', array('total' => 0, 'active' => 0, 'draft' => 0, 'archived' => 0));
         }
     }
     
     /**
-     * REST API Index
-     */
-    private function _restIndex() {
-        $policies = $this->Policy->find('all', array(
-            'order' => array('Policy.created' => 'DESC')
-        ));
-        
-        $this->set(array(
-            'success'   => true,
-            'data'      => $policies,
-            'count'     => count($policies),
-            '_serialize'=> array('success', 'data', 'count')
-        ));
-    }
-    
-    /**
      * View single policy
-     * GET /policies/view/:id or /api/policies/:id
      */
     public function view($id = null) {
         if (!$id) {
-            throw new NotFoundException(__('Invalid policy'));
+            if ($this->_isApiRequest()) {
+                return $this->_sendResponse(array(
+                    'success' => false,
+                    'message' => 'Policy ID required'
+                ), 400);
+            }
+            throw new NotFoundException('Invalid policy');
         }
         
         $policy = $this->Policy->findById($id);
         
         if (!$policy) {
-            if ($this->request->is('api')) {
-                $this->set(array(
+            if ($this->_isApiRequest()) {
+                return $this->_sendResponse(array(
                     'success' => false,
-                    'error'   => 'Policy not found',
-                    '_serialize' => array('success', 'error')
-                ));
-                $this->response->statusCode(404);
-                return;
+                    'message' => 'Policy not found'
+                ), 404);
             }
-            
-            throw new NotFoundException(__('Policy not found'));
+            throw new NotFoundException('Policy not found');
         }
         
-        if ($this->request->is('api')) {
-            $this->set(array(
+        // API Request
+        if ($this->_isApiRequest()) {
+            return $this->_sendResponse(array(
                 'success' => true,
-                'data'    => $policy,
-                '_serialize' => array('success', 'data')
-            ));
-        } else {
-            $this->set('policy', $policy);
+                'data' => $policy
+            ), 200);
         }
+        
+        // WEB Request
+        $this->set('policy', $policy);
+        $this->set('title_for_layout', 'View Policy');
     }
     
     /**
      * Add new policy
-     * POST /policies/add (HTML + modal) or /api/policies (JSON)
      */
     public function add() {
-        $this->set('title_for_layout', 'Add New Policy');
-        
         if ($this->request->is('post')) {
+            $data = $this->_getRequestData();
+            
             $this->Policy->create();
             
-            // API → JSON body, Web → normal form
-            $data = $this->request->is('api')
-                ? $this->request->input('json_decode', true)
-                : $this->request->data;
-            
             if ($this->Policy->save($data)) {
-                $id     = $this->Policy->getLastInsertID();
+                $id = $this->Policy->getLastInsertID();
                 $policy = $this->Policy->findById($id);
                 
-                if ($this->request->is('api')) {
-                    $this->set(array(
+                if ($this->_isApiRequest()) {
+                    return $this->_sendResponse(array(
                         'success' => true,
                         'message' => 'Policy created successfully',
-                        'data'    => $policy,
-                        '_serialize' => array('success', 'message', 'data')
-                    ));
-                    $this->response->statusCode(201);
+                        'data' => $policy
+                    ), 201);
                 } else {
-                    $this->Session->setFlash(
-                        'Policy has been created successfully',
-                        'default',
-                        array('class' => 'success')
-                    );
-                    // Back to admin dashboard (modal use-case)
-                    return $this->redirect(array('controller' => 'users', 'action' => 'dashboard'));
+                    $this->Session->setFlash('Policy created successfully', 'default', array('class' => 'success'));
+                    return $this->redirect(array('action' => 'index'));
                 }
             } else {
-                if ($this->request->is('api')) {
-                    $this->set(array(
+                if ($this->_isApiRequest()) {
+                    return $this->_sendResponse(array(
                         'success' => false,
-                        'error'   => 'Failed to create policy',
-                        'validationErrors' => $this->Policy->validationErrors,
-                        '_serialize' => array('success', 'error', 'validationErrors')
-                    ));
-                    $this->response->statusCode(400);
+                        'message' => 'Failed to create policy',
+                        'errors' => $this->Policy->validationErrors
+                    ), 422);
                 } else {
-                    $this->Session->setFlash(
-                        'Failed to create policy. Please try again.',
-                        'default',
-                        array('class' => 'error')
-                    );
+                    $this->Session->setFlash('Failed to create policy', 'default', array('class' => 'error'));
                 }
             }
+        }
+        
+        // WEB Request - show form
+        if (!$this->_isApiRequest()) {
+            $categories = $this->_getCategories();
+            $this->set('categories', $categories);
+            $this->set('title_for_layout', 'Add Policy');
         }
     }
     
     /**
      * Edit policy
-     * POST/PUT /policies/edit/:id (HTML + modal) or /api/policies/:id
      */
     public function edit($id = null) {
         if (!$id) {
-            throw new NotFoundException(__('Invalid policy'));
+            if ($this->_isApiRequest()) {
+                return $this->_sendResponse(array('success' => false, 'message' => 'ID required'), 400);
+            }
+            throw new NotFoundException('Invalid policy');
         }
         
         $policy = $this->Policy->findById($id);
         
         if (!$policy) {
-            if ($this->request->is('api')) {
-                $this->set(array(
-                    'success' => false,
-                    'error'   => 'Policy not found',
-                    '_serialize' => array('success', 'error')
-                ));
-                $this->response->statusCode(404);
-                return;
+            if ($this->_isApiRequest()) {
+                return $this->_sendResponse(array('success' => false, 'message' => 'Not found'), 404);
             }
-            
-            throw new NotFoundException(__('Policy not found'));
+            throw new NotFoundException('Policy not found');
         }
         
-        $this->set('title_for_layout', 'Edit Policy');
-        
-        if ($this->request->is(array('post', 'put'))) {
-            $data = $this->request->is('api')
-                ? $this->request->input('json_decode', true)
-                : $this->request->data;
-            
+        if ($this->request->is(array('put', 'post'))) {
+            $data = $this->_getRequestData();
             $this->Policy->id = $id;
             
             if ($this->Policy->save($data)) {
                 $updated = $this->Policy->findById($id);
                 
-                if ($this->request->is('api')) {
-                    $this->set(array(
+                if ($this->_isApiRequest()) {
+                    return $this->_sendResponse(array(
                         'success' => true,
-                        'message' => 'Policy updated successfully',
-                        'data'    => $updated,
-                        '_serialize' => array('success', 'message', 'data')
-                    ));
+                        'message' => 'Policy updated',
+                        'data' => $updated
+                    ), 200);
                 } else {
-                    $this->Session->setFlash(
-                        'Policy has been updated successfully',
-                        'default',
-                        array('class' => 'success')
-                    );
-                    return $this->redirect(array('controller' => 'users', 'action' => 'dashboard'));
+                    $this->Session->setFlash('Policy updated', 'default', array('class' => 'success'));
+                    return $this->redirect(array('action' => 'index'));
                 }
             } else {
-                if ($this->request->is('api')) {
-                    $this->set(array(
+                if ($this->_isApiRequest()) {
+                    return $this->_sendResponse(array(
                         'success' => false,
-                        'error'   => 'Failed to update policy',
-                        'validationErrors' => $this->Policy->validationErrors,
-                        '_serialize' => array('success', 'error', 'validationErrors')
-                    ));
-                    $this->response->statusCode(400);
-                } else {
-                    $this->Session->setFlash(
-                        'Failed to update policy. Please try again.',
-                        'default',
-                        array('class' => 'error')
-                    );
+                        'errors' => $this->Policy->validationErrors
+                    ), 422);
                 }
             }
         }
@@ -274,88 +332,88 @@ class PoliciesController extends AppController {
             $this->request->data = $policy;
         }
         
+        $categories = $this->_getCategories();
+        $this->set('categories', $categories);
         $this->set('policy', $policy);
+        $this->set('title_for_layout', 'Edit Policy');
     }
     
     /**
      * Delete policy
-     * DELETE /policies/delete/:id or /api/policies/:id
      */
     public function delete($id = null) {
-        $this->request->allowMethod(array('post', 'delete'));
-        
         if (!$id) {
-            if ($this->request->is('api')) {
-                $this->set(array(
-                    'success' => false,
-                    'error'   => 'Invalid policy ID',
-                    '_serialize' => array('success', 'error')
-                ));
-                $this->response->statusCode(400);
-                return;
+            if ($this->_isApiRequest()) {
+                return $this->_sendResponse(array('success' => false, 'message' => 'ID required'), 400);
             }
-            
-            throw new NotFoundException(__('Invalid policy'));
+            throw new NotFoundException('Invalid policy');
         }
         
         if ($this->Policy->delete($id)) {
-            if ($this->request->is('api')) {
-                $this->set(array(
+            if ($this->_isApiRequest()) {
+                return $this->_sendResponse(array(
                     'success' => true,
-                    'message' => 'Policy deleted successfully',
-                    '_serialize' => array('success', 'message')
-                ));
+                    'message' => 'Policy deleted'
+                ), 200);
             } else {
-                $this->Session->setFlash(
-                    'Policy has been deleted successfully',
-                    'default',
-                    array('class' => 'success')
-                );
+                $this->Session->setFlash('Policy deleted', 'default', array('class' => 'success'));
+                return $this->redirect(array('action' => 'index'));
             }
         } else {
-            if ($this->request->is('api')) {
-                $this->set(array(
-                    'success' => false,
-                    'error'   => 'Failed to delete policy',
-                    '_serialize' => array('success', 'error')
-                ));
-                $this->response->statusCode(400);
-            } else {
-                $this->Session->setFlash(
-                    'Failed to delete policy',
-                    'default',
-                    array('class' => 'error')
-                );
+            if ($this->_isApiRequest()) {
+                return $this->_sendResponse(array('success' => false, 'message' => 'Delete failed'), 500);
             }
         }
-        
-        if (!$this->request->is('api')) {
-            return $this->redirect(array('controller' => 'users', 'action' => 'dashboard'));
-        }
     }
-
+    
     /**
-     * Toggle active/inactive (status) – for dashboard button
+     * Toggle status
      */
     public function toggle_status($id = null) {
+        // Accept ID from URL or AJAX/POST body
+        $data = $this->_getRequestData();
+        if (!$id && !empty($data['id'])) {
+            $id = $data['id'];
+        }
+
         if (!$id) {
-            throw new NotFoundException(__('Invalid policy'));
+            if ($this->request->is('ajax') || $this->_isApiRequest()) {
+                return $this->_sendResponse(array('success' => false, 'message' => 'ID required'), 400);
+            }
+            throw new NotFoundException('Invalid policy');
         }
 
         $policy = $this->Policy->findById($id);
+        
         if (!$policy) {
-            throw new NotFoundException(__('Policy not found'));
+            if ($this->_isApiRequest()) {
+                return $this->_sendResponse(array('success' => false, 'message' => 'Not found'), 404);
+            }
+            throw new NotFoundException('Policy not found');
         }
-
-        $newStatus = ($policy['Policy']['status'] === 'active') ? 'inactive' : 'active';
-
+        
+        // Toggle between 'active' and 'draft' (draft = inactive/disabled)
+        $current = isset($policy['Policy']['status']) ? $policy['Policy']['status'] : '';
+        $newStatus = ($current === 'active') ? 'draft' : 'active';
         $this->Policy->id = $id;
+
         if ($this->Policy->saveField('status', $newStatus)) {
-            $this->Session->setFlash('Policy status updated.', 'default', array('class' => 'success'));
-        } else {
-            $this->Session->setFlash('Failed to update policy status.', 'default', array('class' => 'error'));
+            $updated = $this->Policy->findById($id);
+
+            if ($this->request->is('ajax') || $this->_isApiRequest()) {
+                return $this->_sendResponse(array(
+                    'success' => true,
+                    'message' => 'Status updated to ' . $newStatus,
+                    'data' => $updated
+                ), 200);
+            } else {
+                $this->Session->setFlash('Status updated', 'default', array('class' => 'success'));
+                return $this->redirect(array('action' => 'index'));
+            }
         }
 
-        return $this->redirect(array('controller' => 'users', 'action' => 'dashboard'));
+        if ($this->request->is('ajax') || $this->_isApiRequest()) {
+            return $this->_sendResponse(array('success' => false, 'message' => 'Update failed'), 500);
+        }
     }
 }

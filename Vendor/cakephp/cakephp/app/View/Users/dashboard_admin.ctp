@@ -78,16 +78,7 @@
                     <div class="card">
                         <div class="card-header d-flex justify-content-between align-items-center">
                             <h3 class="card-title mb-0">Policy List</h3>
-                            <div class="card-tools ms-auto">
-                                <button type="button"
-                                    class="btn btn-primary btn-sm ms-auto"
-                                    style="margin-left: auto;"
-                                    data-bs-toggle="modal"
-                                    data-bs-target="#policyModal"
-                                    onclick="openPolicyModal();">
-                                    <i class="fas fa-plus"></i> Add Policy
-                                </button>
-                            </div>
+                          
 
                         </div>
 
@@ -122,12 +113,14 @@
                                             <td class="text-center">
                                                 <?php
                                                 $isActive = ($policy['Policy']['status'] === 'active');
-                                                echo $this->Html->link(
-                                                    $isActive ? 'Active' : 'Inactive',
-                                                    array('controller' => 'policies', 'action' => 'toggle_status', $policy['Policy']['id']),
-                                                    array('class' => 'btn btn-sm ' . ($isActive ? 'btn-success' : 'btn-secondary'))
-                                                );
+                                                $btnClass = $isActive ? 'btn-success' : 'btn-secondary';
                                                 ?>
+                                                <button type="button"
+                                                    class="btn btn-sm <?php echo $btnClass; ?> toggle-status-btn"
+                                                    data-policy-id="<?php echo (int)$policy['Policy']['id']; ?>"
+                                                    data-current-status="<?php echo h($policy['Policy']['status']); ?>">
+                                                    <?php echo $isActive ? 'Active' : 'Inactive'; ?>
+                                                </button>
                                             </td>
 
                                             <!-- Actions -->
@@ -198,6 +191,48 @@
                     </button>
                 </div>
 
+    <script>
+    (function(){
+        function getBaseToggleUrl() {
+            return '<?php echo $this->Html->url(array('controller' => 'policies', 'action' => 'toggle_status'), true); ?>';
+        }
+
+        document.addEventListener('click', function(e){
+            var btn = e.target.closest && e.target.closest('.toggle-status-btn');
+            if (!btn) return;
+            e.preventDefault();
+            var id = btn.getAttribute('data-policy-id');
+            if (!id) return;
+
+            // Disable while request in progress
+            btn.disabled = true;
+            var url = getBaseToggleUrl() + '/' + id;
+
+            fetch(url, {
+                method: 'POST',
+                credentials: 'same-origin',
+                headers: {
+                    'Accept': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            }).then(function(res){
+                return res.json();
+            }).then(function(payload){
+                if (payload && payload.success) {
+                    // Refresh the page so status and lists are consistent
+                    window.location.reload();
+                } else {
+                    alert((payload && payload.message) ? payload.message : 'Status update failed');
+                }
+            }).catch(function(err){
+                console.error(err);
+                alert('Network error');
+            }).finally(function(){
+                btn.disabled = false;
+            });
+        });
+    })();
+    </script>
                 <?php
                 echo $this->Form->create('Policy', array(
                     'id'  => 'policyForm',

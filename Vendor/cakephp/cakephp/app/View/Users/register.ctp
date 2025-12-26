@@ -1,6 +1,6 @@
 <?php
 /**
- * Signup View
+ * Registration View
  */
 ?>
 <!DOCTYPE html>
@@ -32,7 +32,13 @@
                 <?php endif; ?>
 
                 <!-- Signup Form -->
-                <?php echo $this->Form->create('User', array('url' => array('action' => 'signup'), 'id' => 'signupForm')); ?>
+                <?php 
+                // ✅ FIXED: Changed from 'signup' to 'register'
+                echo $this->Form->create('User', array(
+                    'url' => array('controller' => 'users', 'action' => 'register'),  // ← FIXED HERE
+                    'id' => 'signupForm'
+                )); 
+                ?>
                 
                     <!-- User Type Selection -->
                     <div class="form-group">
@@ -59,7 +65,8 @@
                                 'placeholder' => 'Full Name',
                                 'class' => 'form-control',
                                 'div' => false,
-                                'id' => 'fullName'
+                                'id' => 'fullName',
+                                'required' => true
                             )); ?>
                         </div>
                         <div class="form-group">
@@ -70,7 +77,8 @@
                                 'placeholder' => 'User Name',
                                 'class' => 'form-control',
                                 'div' => false,
-                                'id' => 'userName'
+                                'id' => 'userName',
+                                'required' => true
                             )); ?>
                         </div>
                     </div>
@@ -85,7 +93,8 @@
                                 'placeholder' => 'email address',
                                 'class' => 'form-control',
                                 'div' => false,
-                                'id' => 'emailAddress'
+                                'id' => 'emailAddress',
+                                'required' => true
                             )); ?>
                         </div>
                         <div class="form-group">
@@ -96,7 +105,8 @@
                                 'placeholder' => 'confirm email',
                                 'class' => 'form-control',
                                 'div' => false,
-                                'id' => 'confirmEmail'
+                                'id' => 'confirmEmail',
+                                'required' => true
                             )); ?>
                         </div>
                     </div>
@@ -111,7 +121,8 @@
                                 'placeholder' => 'Password',
                                 'class' => 'form-control',
                                 'div' => false,
-                                'id' => 'password'
+                                'id' => 'password',
+                                'required' => true
                             )); ?>
                         </div>
                         <div class="form-group">
@@ -122,7 +133,8 @@
                                 'placeholder' => 'Confirm Password',
                                 'class' => 'form-control',
                                 'div' => false,
-                                'id' => 'confirmPassword'
+                                'id' => 'confirmPassword',
+                                'required' => true
                             )); ?>
                         </div>
                     </div>
@@ -133,7 +145,7 @@
                         <?php echo $this->Form->input('access_code', array(
                             'type' => 'text',
                             'label' => false,
-                            'placeholder' => 'Enter code',
+                            'placeholder' => 'Enter code (0000)',
                             'class' => 'form-control',
                             'div' => false,
                             'id' => 'signupAccessCode'
