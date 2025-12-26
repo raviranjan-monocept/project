@@ -40,6 +40,15 @@
       ['escape' => false, 'class' => 'nav-link', 'data-controller' => 'admins', 'data-action' => 'index']
     ) ?>
   </li>
+          </li>
+ 
+              <li class="nav-item">
+    <?= $this->Html->link(
+      '<i class="nav-icon bi bi-box-seam-fill"></i><p>All Categories</p>',
+      ['controller' => 'Categories', 'action' => 'index'],
+      ['escape' => false, 'class' => 'nav-link', 'data-controller' => 'categories', 'data-action' => 'index']
+    ) ?>
+              </li>
 
                      <!-- Policy Management -->
   <li class="nav-item">
@@ -58,13 +67,6 @@
     ) ?>
               </li>
  
-              <li class="nav-item">
-    <?= $this->Html->link(
-      '<i class="nav-icon bi bi-box-seam-fill"></i><p>All Categories</p>',
-      ['controller' => 'Categories', 'action' => 'index'],
-      ['escape' => false, 'class' => 'nav-link', 'data-controller' => 'categories', 'data-action' => 'index']
-    ) ?>
-              </li>
 
               <li class="nav-item">
     <?= $this->Html->link(

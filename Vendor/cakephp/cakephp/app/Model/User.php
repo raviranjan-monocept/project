@@ -2,50 +2,46 @@
 App::uses('AppModel', 'Model');
 App::uses('BlowfishPasswordHasher', 'Controller/Component/Auth');
 
-class User extends Model {
+class User extends AppModel {
     
     public $name = 'User';
     
-    // Validation rules
     public $validate = array(
         'full_name' => array(
-            'notEmpty' => array(
-                'rule' => 'notEmpty',
-                'message' => 'Full name is required'
-            )
+            'rule' => 'notBlank',
+            'message' => 'Full name is required'
         ),
         'username' => array(
-            'notEmpty' => array(
-                'rule' => 'notEmpty',
+            'notBlank' => array(
+                'rule' => 'notBlank',
                 'message' => 'Username is required'
             ),
-            'unique' => array(
+            'isUnique' => array(
                 'rule' => 'isUnique',
-                'message' => 'This username is already taken',
-                'on' => 'update' // Only check on update if different
+                'message' => 'This username is already taken'
             )
         ),
         'email' => array(
+            'notBlank' => array(
+                'rule' => 'notBlank',
+                'message' => 'Email is required'
+            ),
             'email' => array(
                 'rule' => 'email',
-                'message' => 'Please provide a valid email'
+                'message' => 'Please provide a valid email address'
             ),
-            'unique' => array(
+            'isUnique' => array(
                 'rule' => 'isUnique',
-                'message' => 'This email is already registered',
-                'on' => 'update'
+                'message' => 'This email is already registered'
             )
         ),
         'password' => array(
-            'notEmpty' => array(
-                'rule' => 'notEmpty',
-                'message' => 'Password is required',
-                'on' => 'create' // Only on registration
-            )
+            'rule' => 'notBlank',
+            'message' => 'Password is required',
+            'on' => 'create'
         )
     );
     
-    // Hash password before saving
     public function beforeSave($options = array()) {
         if (isset($this->data[$this->alias]['password']) && !empty($this->data[$this->alias]['password'])) {
             $passwordHasher = new BlowfishPasswordHasher();
