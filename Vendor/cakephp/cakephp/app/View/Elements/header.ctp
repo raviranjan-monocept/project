@@ -39,7 +39,7 @@
                             <span class="dropdown-arrow">▾</span>
                         </button>
                         <div class="dropdown-menu" id="roleDropdownMenu">
-                            <a href="#" class="dropdown-item" data-role="user">USER</a>
+                            <a href="#" class="dropdown-item" data-role="user">CUSTOMER</a>
                             <a href="#" class="dropdown-item" data-role="admin">ADMIN</a>
                             <a href="#" class="dropdown-item" data-role="super_user">SUPER USER</a>
                         </div>
@@ -76,7 +76,7 @@
                     </div>
                 </div>
                 <?php 
-                // ✅ FIXED: Changed 'signup' to 'register'
+             
                 echo $this->Html->link('Register', array('controller' => 'users', 'action' => 'register'), array('class' => 'btn btn-signup')); 
                 ?>
             <?php endif; ?>

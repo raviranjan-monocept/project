@@ -19,6 +19,7 @@ $memberSince = !empty($authUser['created']) ? date('M Y', strtotime($authUser['c
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo isset($title_for_layout) ? $title_for_layout : 'Dashboard'; ?> - Care Health Insurance</title>
     <?php echo $this->Html->css('adminlte'); ?>
+    
     <?php echo $this->Html->css('https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css'); ?>
     <?php echo $this->Html->css('https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/styles/overlayscrollbars.min.css'); ?>
 </head>

@@ -82,13 +82,16 @@
       ['escape' => false, 'class' => 'nav-link', 'data-controller' => 'reports', 'data-action' => 'index']
     ) ?>
               </li>
+<?php if ($this->Session->read('Auth.User.role') === 'super_user'): ?>
+    <li class="nav-item">
+        <?php echo $this->Html->link(
+            '<i class="nav-icon bi bi-gear-fill"></i><p>Manage FAQs</p>',
+            ['controller' => 'faqs', 'action' => 'manage'],
+            ['escape' => false, 'class' => 'nav-link']
+        ); ?>
+    </li>
+<?php endif; ?>
 
-              <li class="nav-item">
-    <?= $this->Html->link(
-      '<i class="nav-icon bi bi-question-circle-fill"></i><p>FAQ / Help Center</p>',
-      ['controller' => 'Help', 'action' => 'index'],
-      ['escape' => false, 'class' => 'nav-link', 'data-controller' => 'help', 'data-action' => 'index']
-    ) ?>
               </li>
             <li class="nav-item">
     <?= $this->Html->link(

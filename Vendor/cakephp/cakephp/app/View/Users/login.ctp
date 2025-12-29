@@ -126,7 +126,7 @@
                             )); ?>
                         </div>
                         <div class="form-right">
-                            <?php echo $this->Html->link('CREATE AN ACCOUNT', array('action' => 'signup'), array('class' => 'link-text')); ?>
+                            <?php echo $this->Html->link('CREATE AN ACCOUNT', array('action' => 'register'), array('class' => 'link-text')); ?>
                         </div>
                     </div>
 

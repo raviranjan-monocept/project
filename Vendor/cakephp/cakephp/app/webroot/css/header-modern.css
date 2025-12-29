@@ -1,0 +1,458 @@
+/* ===================================
+   MODERN HEADER WITH GLASSMORPHISM
+   =================================== */
+
+.modern-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    padding: 1rem 2rem;
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.header-wrapper {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* ===================================
+   BRAND/LOGO SECTION
+   =================================== */
+
+.brand-section {
+    display: flex;
+    align-items: center;
+}
+
+.logo-link {
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    transition: transform 0.3s ease;
+}
+
+.logo-link:hover {
+    transform: translateY(-2px);
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.logo-icon {
+    width: 48px;
+    height: 48px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    transition: all 0.3s ease;
+}
+
+.logo-link:hover .logo-icon {
+    transform: rotate(5deg) scale(1.05);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+}
+
+.logo-icon i {
+    font-size: 24px;
+    color: #ffffff;
+}
+
+.logo-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.brand-name {
+    font-size: 24px;
+    font-weight: 700;
+    color: #1a202c;
+    line-height: 1;
+    letter-spacing: -0.5px;
+}
+
+.brand-tagline {
+    font-size: 12px;
+    font-weight: 500;
+    color: #667eea;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* ===================================
+   NAVIGATION CONTROLS
+   =================================== */
+
+.header-nav {
+    display: flex;
+    align-items: center;
+}
+
+.nav-controls {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+/* ===================================
+   ROLE SELECTOR WITH DROPDOWN
+   =================================== */
+
+.role-selector-modern {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.selector-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #4a5568;
+}
+
+.custom-dropdown {
+    position: relative;
+}
+
+.dropdown-trigger {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 18px;
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(102, 126, 234, 0.2);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    font-family: inherit;
+    min-width: 160px;
+}
+
+.dropdown-trigger:hover {
+    border-color: rgba(102, 126, 234, 0.5);
+    background: rgba(255, 255, 255, 1);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(102, 126, 234, 0.15);
+}
+
+.dropdown-trigger.active {
+    border-color: #667eea;
+    box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+}
+
+.role-icon {
+    width: 32px;
+    height: 32px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.role-icon i {
+    font-size: 16px;
+    color: #ffffff;
+}
+
+.role-label {
+    flex: 1;
+    font-size: 15px;
+    font-weight: 600;
+    color: #2d3748;
+    text-align: left;
+}
+
+.dropdown-chevron {
+    color: #a0aec0;
+    transition: transform 0.3s ease;
+    font-size: 12px;
+}
+
+.dropdown-trigger.active .dropdown-chevron {
+    transform: rotate(180deg);
+}
+
+/* ===================================
+   DROPDOWN PANEL (GLASSMORPHISM)
+   =================================== */
+
+.dropdown-panel {
+    position: absolute;
+    top: calc(100% + 12px);
+    right: 0;
+    min-width: 280px;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 16px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+}
+
+.dropdown-panel.open {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.dropdown-header {
+    padding: 16px 20px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    background: rgba(102, 126, 234, 0.05);
+}
+
+.dropdown-header span {
+    font-size: 13px;
+    font-weight: 600;
+    color: #667eea;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.dropdown-options {
+    padding: 8px;
+}
+
+.dropdown-option {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 12px;
+    background: transparent;
+    border: 2px solid transparent;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    text-align: left;
+    font-family: inherit;
+    margin-bottom: 4px;
+    opacity: 0;
+    animation: slideInOption 0.3s ease forwards;
+}
+
+@keyframes slideInOption {
+    from {
+        opacity: 0;
+        transform: translateX(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.dropdown-option:hover {
+    background: rgba(102, 126, 234, 0.08);
+    border-color: rgba(102, 126, 234, 0.2);
+    transform: translateX(4px);
+}
+
+.dropdown-option.active {
+    background: rgba(102, 126, 234, 0.12);
+    border-color: rgba(102, 126, 234, 0.3);
+}
+
+.option-icon {
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.dropdown-option:hover .option-icon {
+    transform: scale(1.1) rotate(5deg);
+}
+
+.option-icon i {
+    font-size: 18px;
+    color: #ffffff;
+}
+
+.option-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.option-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: #2d3748;
+}
+
+.option-desc {
+    font-size: 12px;
+    color: #718096;
+}
+
+.option-check {
+    width: 24px;
+    height: 24px;
+    background: #667eea;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transform: scale(0);
+    transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.dropdown-option.active .option-check {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.option-check i {
+    font-size: 12px;
+    color: #ffffff;
+}
+
+/* ===================================
+   CTA BUTTONS
+   =================================== */
+
+.cta-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 24px;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+}
+
+.gradient-button {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: #ffffff;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+}
+
+.gradient-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
+}
+
+.gradient-button i {
+    font-size: 14px;
+    transition: transform 0.3s ease;
+}
+
+.gradient-button:hover i {
+    transform: translateX(4px);
+}
+
+.outline-button {
+    background: transparent;
+    color: #667eea;
+    border: 2px solid #667eea;
+}
+
+.outline-button:hover {
+    background: #667eea;
+    color: #ffffff;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+}
+
+.outline-button i {
+    transition: transform 0.3s ease;
+}
+
+.outline-button:hover i {
+    transform: translateX(-4px);
+}
+
+/* ===================================
+   RESPONSIVE DESIGN
+   =================================== */
+
+@media (max-width: 768px) {
+    .modern-header {
+        padding: 0.8rem 1rem;
+    }
+    
+    .logo-icon {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .logo-icon i {
+        font-size: 20px;
+    }
+    
+    .brand-name {
+        font-size: 20px;
+    }
+    
+    .selector-label {
+        display: none;
+    }
+    
+    .dropdown-trigger {
+        min-width: 130px;
+        padding: 8px 14px;
+    }
+    
+    .cta-button {
+        padding: 10px 18px;
+        font-size: 14px;
+    }
+    
+    .cta-button span {
+        display: none;
+    }
+    
+    .gradient-button i {
+        margin: 0;
+    }
+    
+    .nav-controls {
+        gap: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .brand-tagline {
+        display: none;
+    }
+    
+    .dropdown-panel {
+        right: -50px;
+        min-width: 260px;
+    }
+}

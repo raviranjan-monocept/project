@@ -293,12 +293,13 @@
                 
               </li>
 
-              <li class="nav-item">
-                <a href="./docs/introduction.html" class="nav-link">
-                  <i class="nav-icon bi bi-download"></i>
-                  <p>Profile Settings</p>
-                </a>
-              </li>
+           <li class="nav-item">
+    <?= $this->Html->link(
+      '<i class="nav-icon bi bi-palette"></i><p>Profile Setting</p>',
+      ['controller' => 'users', 'action' => 'profile'],
+      ['escape' => false, 'class' => 'nav-link', 'data-controller' => 'users', 'data-action' => 'profile']
+    ) ?>
+  </li>
            
 
               <li class="nav-item">
