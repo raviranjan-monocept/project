@@ -1,4 +1,5 @@
- <?php echo $this->element('navbar'); ?>
+<?php echo $this->element('navbar'); ?>
+
       <!--end::Header-->
       <!--begin::Sidebar-->
       <?php echo $this->element('sidebar'); ?>
@@ -77,6 +78,7 @@
                                         'placeholder' => 'Enter email address',
                                         'required' => true
                                     )); ?>
+                                    <small class="form-text text-muted">Access code will be sent to this email</small>
                                 </div>
                             </div>
 
@@ -92,6 +94,29 @@
                                         'required' => true
                                     )); ?>
                                     <small class="form-text text-muted">Password must be at least 6 characters</small>
+                                </div>
+                            </div>
+
+                            <!-- Access Code (NEW FIELD) -->
+                            <div class="form-group row">
+                                <label for="access_code" class="col-sm-3 col-form-label">Access Code <span class="text-danger">*</span></label>
+                                <div class="col-sm-9">
+                                    <div class="input-group">
+                                        <?php echo $this->Form->input('access_code', array(
+                                            'type' => 'text',
+                                            'class' => 'form-control',
+                                            'label' => false,
+                                            'placeholder' => 'Enter access code',
+                                            'required' => true,
+                                            'id' => 'access_code'
+                                        )); ?>
+                                        <div class="input-group-append">
+                                            <button class="btn btn-outline-secondary" type="button" id="generateCode">
+                                                <i class="fas fa-random"></i> Generate
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <small class="form-text text-muted">This code will be sent to the admin's email address</small>
                                 </div>
                             </div>
 
@@ -116,8 +141,7 @@
                             <!-- Info Alert -->
                             <div class="alert alert-info">
                                 <i class="fas fa-info-circle"></i>
-                                <strong>Note:</strong> An access code will be automatically generated for this administrator. 
-                                Make sure to save it as it will only be shown once.
+                                <strong>Email Notification:</strong> An email containing the access code will be automatically sent to the administrator's email address upon account creation.
                             </div>
                         </div>
 
@@ -144,7 +168,8 @@
         </div>
     </section>
 </div>
- <?php $this->start('script'); ?>
+
+<?php $this->start('script'); ?>
 <style>
 .form-control {
     display: block;
@@ -176,6 +201,31 @@
     border: 1px solid transparent;
     border-radius: .25rem;
 }
+
+.input-group-append {
+    margin-left: -1px;
+}
+
+.input-group-append .btn {
+    border-radius: 0 .25rem .25rem 0;
+}
 </style>
-  <?php $this->end(); ?>
-  <?php echo $this->element('footer'); ?>
+
+<script>
+// Generate random access code
+document.getElementById('generateCode').addEventListener('click', function() {
+    var length = 8;
+    var charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    var code = '';
+    
+    for (var i = 0; i < length; i++) {
+        var randomIndex = Math.floor(Math.random() * charset.length);
+        code += charset[randomIndex];
+    }
+    
+    document.getElementById('access_code').value = code;
+});
+</script>
+<?php $this->end(); ?>
+
+<?php echo $this->element('footer'); ?>
