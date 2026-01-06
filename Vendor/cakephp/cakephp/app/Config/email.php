@@ -38,18 +38,18 @@
 
 class EmailConfig {
     
-    // Try this configuration first (TLS on port 587)
+    
     public $smtp = array(
         'transport' => 'Smtp',
         'from' => array('spc.raviranjan@gmail.com' => 'Insurance System'),
-        'host' => 'smtp.gmail.com', // Remove ssl:// prefix
-        'port' => 587, // Use TLS port
+        'host' => 'smtp.gmail.com', 
+        'port' => 587, // Useing TLS port
         'timeout' => 30,
         'username' => 'spc.raviranjan@gmail.com',
         'password' => 'uthmljrpthnmzici',
         'charset' => 'utf-8',
         'headerCharset' => 'utf-8',
-        'tls' => true, // Enable TLS
+        'tls' => true, // Enableing TLS
     );
 }
 

@@ -69,7 +69,7 @@
                             'placeholder' => 'Password',
                             'class' => 'form-control',
                             'div' => false,
-                            'value' => '' // Don't pre-fill password for security
+                            'value' => '' // Never pre-fill password field
                         )); ?>
                         <p class="helper-text">
                             Do not share your password with anyone. Employees of care insurance will never ask you to disclose this information. Please report any attempt to obtain your password to <a href="mailto:security@careinsurance.com">security@careinsurance.com</a>
